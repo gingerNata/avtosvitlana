@@ -1,0 +1,102 @@
+@media screen and (max-width: 1100px) {
+    .node-type-product-display .field-name-advblock{
+        display: none;
+    }
+
+    .blog-pages .group-left {
+        width: 100%;
+    }
+
+    .blog-pages .group-right {
+        width: 100%;
+    }
+
+}
+@media screen and (max-width: 768px) {
+
+    #header-top-inside .col-md-4, .col-md-2{
+        display: inline-block;
+        text-align: center;
+    }
+    #header-top-inside .col-md-2{
+        width: 30%;
+    }
+    .node-type-product-display .group-right .field-name-commerce-price {
+        font-size: 1.8em;
+    }
+    .node-type-product-display .field-name-fast-bye{
+        margin: 20px 0;
+    }
+    .w3-bar .w3-button {
+        margin-left: 5px;
+    }
+    div.ctools-modal-content{
+        width: 100%;
+    }
+    #modalContent{
+        left: 0!important;
+        top: 0!important;
+    }
+    .node-request-form fieldset{
+        width: 100%;
+    }
+
+    .page-node-1 .region-content .row {
+        margin: 0;
+    }
+    .blog-pages .field-name-field-image img {
+         margin: 0 auto;
+    }
+    div.messages.commerce-add-to-cart-confirmation{
+        width: 90%;
+    }
+    div.messages.commerce-add-to-cart-confirmation {
+        margin-left: -49% !important;
+    }
+
+}
+@media screen and (max-width: 400px) {
+    /********************* User menu block *****************************/
+    #block-menu-menu-user-menu {
+        width: 350px;
+    }
+
+    #block-menu-menu-user-menu a {
+        padding: 8px 16px !important;
+        width: 145px;
+        vertical-align: top;
+    }
+    #main-navigation ul.menu li a{
+        padding: 5px;
+    }
+    /************************** Cars block *****************************/
+    .cars-block .views-row {
+        width: 120px;
+    }
+    .main-catalog li.views-row {
+        width: auto;
+    }
+    /**************************** Facets *******************************/
+    #block-facetapi-1q42zld10krsrgzuhrrxq1hp4liekkeb, #block-facetapi-z1kbl0brnycptgovlpl0u5g4gthghfax,
+    #block-facetapi-z81pdc9qru13qdlnzbhxtxfht1pmmd0y{
+        display: none;
+    }
+    /**************************** Product *****************************/
+    .w3-bar .w3-button {
+        margin-left: 0;
+    }
+    .w3-bar-item{
+        padding: 5px;
+        font-size: 1em;
+    }
+    /**************************** Footer *****************************/
+    #subfooter {
+        padding: 13px 0 0px;
+    }
+    .copyright, .developed {
+        position: relative!important;
+    }
+    .text {
+        margin: 0;
+    }
+}

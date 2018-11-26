@@ -1,0 +1,4 @@
+name = Avto Custom Module
+description = Custom functionality to site.
+core = 7.x
+package = Custom

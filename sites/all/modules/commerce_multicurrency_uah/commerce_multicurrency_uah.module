@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * Defines currency exchange rate sync providers from Ukraine.
+ *
+ * @return array
+ *   An array of information about the callback.
+ *   The array contains a sub-array for each callback, with a machine name
+ *   as the key.
+ */
+function commerce_multicurrency_uah_commerce_multicurrency_exchange_rate_sync_provider_info() {
+  return array(
+    'bankua' => array(
+      'title' => t('Bank-ua.com'),
+      'callback' => 'commerce_multicurrency_uah_exchange_rate_sync_provider_bankua',
+      'file' => drupal_get_path('module', 'commerce_multicurrency_uah') . '/commerce_multicurrency_uah.bankua.inc',
+    ),
+  );
+}

@@ -1,0 +1,4 @@
+name = Custom Import from previous site
+description = Custom functionality to site.
+core = 7.x
+package = Custom

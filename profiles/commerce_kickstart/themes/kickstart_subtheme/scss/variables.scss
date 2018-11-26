@@ -1,0 +1,47 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,700,300,600,800);
+@import url(//fonts.googleapis.com/css?family=Gentium+Basic:400,700);
+
+$bodybg: #ffffff;
+
+$headerfont: 'PT Sans', arial;
+$altheaderfont: 'Ubuntu', serif;
+
+//text color
+$color1: #2698F2;
+//$color2: #077108;
+$color2: #2d9f09;
+
+
+
+// mobile specific elements
+$mobilemenubg: #444;
+$tabletmenubg: transparent;
+// User Zone
+$topbarbackground: #888;
+// shopping cart block (in user zone)
+$cartceckoutbg: #999;
+$cartceckoutcolor: #bdfff7;
+// main menu
+$mainmenuitembg: #ee81a7;
+$mainmenuitemborder: 1px solid #CCC;
+$mainmenulinkcolor: #888;
+$mainmenuitembghover: #FFF;
+$mainmenuitemborderhover: 1px solid #CCC;
+$mainmenuitemfonthover: #999;
+$mainmenuitemfontactive: #000;
+// secondary menu
+$secondarymenuitembg: #EEE;
+$secondarymenuitemborder: 1px solid #CCC;
+$secondarymenulinkcolor: #888;
+$secondarymenuitembghover: #FFF;
+$secondarymenuitemborderhover: 1px solid #CCC;
+$secondarymenuitemfonthover: #999;
+$secondarymenuitemfontactive: #000;
+
+// footer
+$footerbg: #e0e3e4;
+$footermenuheadercolor: #444;
+$footermenulinkcolor: #666;
+
+$footer2bg: #01599c;
+$footercontacts: #01487e;
