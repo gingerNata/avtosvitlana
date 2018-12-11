@@ -1,26 +1,66 @@
 <?php
 
-
+/**
+ * Page callback for 'admin/structure/crumbs/debug'.
+ *
+ * @return string
+ *   The rendered HTML for the debug page.
+ */
 function crumbs_debug_page() {
   drupal_set_title('Crumbs debug');
-  $path = isset($_GET['path_to_test']) ? $_GET['path_to_test'] : '';
-  $path_checked = check_plain($path);
+
+  $path_to_test = '';
+  if (isset($_GET['path_to_test'])) {
+    $path_to_test = $_GET['path_to_test'];
+  }
+  elseif (!empty($_SESSION['crumbs.admin.debug.history'])) {
+    foreach ($_SESSION['crumbs.admin.debug.history'] as $path => $true) {
+      if ('admin' !== substr($path, 0, 5)) {
+        $path_to_test = $path;
+      }
+      elseif ('admin/structure/crumbs' !== substr($path, 0, 22)) {
+        $admin_path_to_test = $path;
+      }
+    }
+    if (empty($path_to_test) && !empty($admin_path_to_test)) {
+      $path_to_test = $admin_path_to_test;
+    }
+  }
+
+  $path_checked = check_plain($path_to_test);
   $form_action = url('admin/structure/crumbs/debug');
 
   $input_html = <<<EOT
-<input id="path" type="text" class="form-text" size="40" name="path_to_test" value="$path_checked"/>
+<input id="crumbs-admin-debug-path" type="text" class="form-text" size="40" name="path_to_test" value="$path_checked" />
+<input type="submit" value="Go" class="form-submit" />
 EOT;
-  $input_html = t('Path: !text_field', array('!text_field' => $input_html));
-  $text = <<<EOT
-<p>This page allows to have a look "behind the scenes", so you can analyse
-which crumbs plugins and rules are responsible for the "crumbs parent" to a
-given system path.</p>
-<p>Crumbs will "ask" different plugins, until one of them responds with a parent
-path candidate. The candidate with the highest weight wins.</p>
-<p>Crumbs will stop invoking any more plugins, once it is clear that further
-candidates will only have smaller weights.</p>
+  $input_html = t('Breadcrumb for: !text_field', array('!text_field' => $input_html));
+
+  $placeholders = array(
+    '!plugin_weights' => l(t('Plugin weights'), 'admin/structure/crumbs'),
+    '!display_settings' => l(t('Display settings'), 'admin/structure/crumbs/display'),
+  );
+
+  $paragraphs = array();
+  $paragraphs[] = <<<EOT
+This page allows to have a look "behind the scenes", so you can analyse which crumbs plugins and rules are responsible for the "crumbs parent" to a given system path.
 EOT;
-  $text = t($text);
+
+  $paragraphs[] = <<<EOT
+For each breadcrumb item, the Crumbs plugins can suggest candidates for the parent path and the breadcrumb item title.
+Crumbs assigns a weight to each candidate, depending on the !plugin_weights configuration.
+The candidate with the smallest weight wins.
+EOT;
+
+  $paragraphs[] = <<<EOT
+Please note that some items may still be hidden, depending on the !display_settings.
+EOT;
+
+  $text = '';
+  foreach ($paragraphs as $paragraph) {
+    $paragraph = str_replace("\n", '<br/>', $paragraph);
+    $text .= '<p>' . t($paragraph, $placeholders) . '</p>' . "\n";
+  }
 
   $html = <<<EOT
     <form method="get" action="$form_action">
@@ -28,131 +68,166 @@ EOT;
       <label for="path">$input_html</label>
     </form>
 EOT;
-  if (strlen($path)) {
-    crumbs_benchmark();
-    $log = array();
 
-    $path = drupal_get_normal_path($path);
-
-    $log[] = crumbs_benchmark('drupal_get_normal_path()');
-
-    $item = crumbs_get_router_item($path);
-
-    $log[] = crumbs_benchmark('crumbs_get_router_item("' . $path . '")');
-
-    $engine = crumbs_get_plugin_engine();
-
-    $log[] = crumbs_benchmark('crumbs_get_plugin_engine()');
-
-    $op = new crumbs_PluginOperation_findTitle($path, $item, array());
-    $engine->invokeAll_find($op);
-    $title = $op->getValue();
-    $title_candidates = $op->getLoggedCandidates();
-    $title_candidate_key = $op->getCandidateKey();
-
-    $log[] = crumbs_benchmark('find title');
-
-    $op = new crumbs_PluginOperation_findParent($path, $item, array());
-    $engine->invokeAll_find($op);
-    $parent_path = $op->getValue();
-    $parent_path_candidates = $op->getLoggedCandidates();
-    $parent_path_candidate_key = $op->getCandidateKey();
-    $parent_path = drupal_get_normal_path($parent_path);
-    $parent_item = crumbs_get_router_item($parent_path);
-
-    $log[] = crumbs_benchmark('find parent');
-
-    if (!empty($parent_item)) {
-      $op = new crumbs_PluginOperation_findTitle($parent_path, $parent_item, array());
-      $engine->invokeAll_find($op);
-      $parent_title = $op->getValue();
-      $parent_title_candidates = $op->getLoggedCandidates();
-      $parent_title_candidate_key = $op->getCandidateKey();
-    }
-
-    $log[] = crumbs_benchmark('find parent title');
-
-    $log_html = implode('<br/>', $log);
-
-    $default_row = array(
-      '',
-      '(default)',
-      $item['title'],
-      crumbs_reduce_path($path),
-      $parent_item['title'],
-    );
-
-    $sort = array();
-    $rule_found = FALSE;
-    foreach (array('title', 'parent_path', 'parent_title') as $i => $k) {
-      if (!isset(${$k . '_candidates'})) {
-        continue;
-      }
-      if (!isset($$k)) {
-        $default_row[$i + 2] = '<strong>' . $default_row[$i + 2] . '</strong>';
-      }
-      foreach (${$k . '_candidates'} as $key => $x) {
-        list($candidate, $weight) = $x;
-        if (FALSE === $weight) {
-          // This one is disabled. Continue.
-          $weight = 'FALSE';
-        }
-        elseif (is_null($weight)) {
-          $weight = '';
-        }
-        elseif (!is_numeric($weight)) {
-          $weight = '?';
-        }
-        if (!isset($sort[$weight][$key])) {
-          $sort[$weight][$key] = array(
-            $weight,
-            $key,
-            '',
-            '',
-            '',
-          );
-        }
-        if (FALSE === $candidate) {
-          $candidate = 'FALSE';
-        }
-        elseif (is_null($candidate)) {
-          $candidate = '-';
-        }
-        if ($key === ${$k . '_candidate_key'}) {
-          $candidate = '<strong>' . check_plain($candidate) . '</strong>';
-        }
-        $sort[$weight][$key][$i + 2] = $candidate;
-      }
-    }
-
-    ksort($sort);
-    $all = array();
-    foreach ($sort as $weight => $rows) {
-      foreach ($rows as $key => $row) {
-        $all[] = $row;
-      }
-    }
-
-    // Default row.
-    $all[] = $default_row;
-
-    $head = array(
-      'Weight',
-      'Key',
-      'Title candidate',
-      'Parent path candidate',
-      'Parent title candidate',
-    );
-    $table = theme('table', array(
-      'header' => $head,
-      'rows' => $all,
-    ));
-
-    $html .= <<<EOT
-      <p>$text</p>
-      <p>$log_html</p>
-      $table
-EOT;
+  if (strlen($path_to_test)) {
+    $path_to_test = drupal_get_normal_path($path_to_test);
+    $html .= _crumbs_admin_debug_matrix($path_to_test);
   }
+
+  if (!empty($_SESSION['crumbs.admin.debug.history'])) {
+    $recently_visited = '';
+    foreach (array_reverse($_SESSION['crumbs.admin.debug.history']) as $path => $true) {
+      if ('admin/structure/crumbs/debug' !== substr($path, 0, 28)) {
+        // We can't use l() directly, since this would add an "active" class.
+        $url = url('admin/structure/crumbs/debug', array('query' => array('path_to_test' => $path)));
+        $link = l($path, $url, array('external' => TRUE));
+        $recently_visited .= '<li>' . $link . '</li>';
+      }
+    }
+    if ($recently_visited) {
+      $html .= t('Recently visited') . ':<ol>' . $recently_visited . '</ol>';
+    }
+  }
+
   return $html;
+}
+
+/**
+ * Helper function for crumbs_admin_debug_page().
+ *
+ * @param string $path_to_test
+ *   Test path to build a Crumbs breadcrumb.
+ * @return string
+ *   The debug matrix as rendered html.
+ */
+function _crumbs_admin_debug_matrix($path_to_test) {
+
+  // Create a local version of the service container.
+  $services = new crumbs_DIC_ServiceContainer();
+  $page_info = $services->page;
+  $page_info->path = $path_to_test;
+
+  // Change the settings so that all breadcrumb items are visible.
+  $page_info->minTrailItems = 1;
+  $page_info->showFrontPage = TRUE;
+  $page_info->showCurrentPage = TRUE;
+
+  $unfilteredPluginBag = new crumbs_PluginSystem_PluginBag(
+    $services->pluginInfo->plugins,
+    $services->pluginInfo->routelessPluginMethodsUnsorted,
+    $services->pluginInfo->routePluginMethodsUnsorted);
+
+  $unfilteredPluginEngine = new crumbs_PluginSystem_PluginEngine(
+    $unfilteredPluginBag,
+    $services->router,
+    $services->pluginInfo->weightMap);
+
+  $table = new crumbs_Admin_DebugTable();
+
+  $table->setTrail(
+    $page_info->trail,
+    $page_info->rawBreadcrumbItems);
+
+  $table->addPluginResults(
+    $unfilteredPluginEngine,
+    $services->pluginInfo->weightMap);
+
+  $html = $table->render();
+  return '<div style="overflow-x: auto;">' . $html . '</div>';
+}
+
+function _crumbs_debug_devel_page() {
+  drupal_set_title('Crumbs debug - devel');
+
+  $path_to_test = '';
+  if (isset($_GET['path_to_test'])) {
+    $path_to_test = $_GET['path_to_test'];
+  }
+  elseif (!empty($_SESSION['crumbs.admin.debug.history'])) {
+    foreach ($_SESSION['crumbs.admin.debug.history'] as $path => $true) {
+      if ('admin' !== substr($path, 0, 5)) {
+        $path_to_test = $path;
+      }
+      elseif ('admin/structure/crumbs' !== substr($path, 0, 22)) {
+        $admin_path_to_test = $path;
+      }
+    }
+    if (empty($path_to_test) && !empty($admin_path_to_test)) {
+      $path_to_test = $admin_path_to_test;
+    }
+  }
+
+  $path_checked = check_plain($path_to_test);
+  $form_action = url('admin/structure/crumbs/debug/devel');
+
+  $input_html = <<<EOT
+<input id="crumbs-admin-debug-path" type="text" class="form-text" size="40" name="path_to_test" value="$path_checked" />
+<input type="submit" value="Go" class="form-submit" />
+EOT;
+  $input_html = t('Internal data for: !text_field', array('!text_field' => $input_html));
+
+  $placeholders = array(
+    '!plugin_weights' => l(t('Plugin weights'), 'admin/structure/crumbs'),
+    '!display_settings' => l(t('Display settings'), 'admin/structure/crumbs/display'),
+  );
+
+  $paragraphs = array();
+  $paragraphs[] = <<<EOT
+This page shows the data internally generated by Crumbs to create a breadcrumb for the given path.
+EOT;
+
+  $paragraphs[] = <<<EOT
+The behavior depends on the !plugin_weights, !display_settings and the current theme.
+EOT;
+
+  $paragraphs[] = <<<EOT
+The theme is the one active for this administration page, which is not necessarily the same as for the page where you want the breadcrumb to appear.
+EOT;
+
+  $text = '';
+  foreach ($paragraphs as $paragraph) {
+    $paragraph = str_replace("\n", '<br/>', $paragraph);
+    $text .= '<p>' . t($paragraph, $placeholders) . '</p>' . "\n";
+  }
+
+  $html = <<<EOT
+    <form method="get" action="$form_action">
+      $text
+      <label for="path">$input_html</label>
+    </form>
+EOT;
+
+  if (strlen($path_to_test)) {
+    $path_to_test = drupal_get_normal_path($path_to_test);
+    $html .= _crumbs_admin_debug_devel_data($path_to_test);
+  }
+
+  if (!empty($_SESSION['crumbs.admin.debug.history'])) {
+    $recently_visited = '';
+    foreach (array_reverse($_SESSION['crumbs.admin.debug.history']) as $path => $true) {
+      if ('admin/structure/crumbs/debug' !== substr($path, 0, 28)) {
+        // We can't use l() directly, since this would add an "active" class.
+        $url = url('admin/structure/crumbs/debug/devel', array('query' => array('path_to_test' => $path)));
+        $link = l($path, $url, array('external' => TRUE));
+        $recently_visited .= '<li>' . $link . '</li>';
+      }
+    }
+    if ($recently_visited) {
+      $html .= t('Recently visited') . ':<ol>' . $recently_visited . '</ol>';
+    }
+  }
+
+  return $html;
+}
+
+function _crumbs_admin_debug_devel_data($path_to_test) {
+
+  // Create a local version of the service container.
+  $services = new crumbs_DIC_ServiceContainer();
+  $page_info = $services->page;
+  $page_info->path = $path_to_test;
+
+  $data = crumbs_Container_ContainerUtil::getAllProperties($page_info);
+
+  return kprint_r($data, TRUE);
 }

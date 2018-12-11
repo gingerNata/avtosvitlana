@@ -1,235 +1,272 @@
 <?php
 
+/**
+ * The form displayed on admin/structure/crumbs(/weights)
+ *
+ * @param array $form
+ * @param array $form_state
+ * @param string $type
+ *   E.g. 'tabledrag' or 'textual' or 'expansible'.
+ *
+ * @return array
+ */
+function crumbs_admin_weights_form($form, $form_state, $type = 'tabledrag') {
 
-function crumbs_admin_form() {
   $form = array();
 
-  // drupal_add_js(drupal_get_path('module', 'crumbs') .'/crumbs.admin.js');
-  // drupal_add_css(drupal_get_path('module', 'crumbs') .'/crumbs.admin.css');
+  $info = crumbs()->pluginInfo;
 
-  $text_sections = '';
-  foreach (array(
-    '(enabled)' => 'This section does not have a label, it is just anything at
-the top. Criteria in here are considered explicitly enabled, and can be
-prioritized by moving them up and down. Criteria that are further up, have a
-higher priority. By default, only the asterisk * wildcard is in this section.',
-    'disabled' => 'Criteria in this section are considered explicitly
-disabled. By default, this section is empty.<br/>(*)',
-    'disabled by default' => 'Criteria in this section are implicitly
-disabled. New critera end up here, if the plugin code says so.<br/>(**)',
-    'inherit' => 'Criteria in this section "inherit" their weight and
-enabled/disabled status from the best matching wildcard criterion. See the
-documentation for details. New criteria end up in this section by default.<br/>(**)',
-  ) as $title => $desc) {
-    $desc = t($desc);
-    $text_sections .= <<<EOT
-<dt><pre>---- $title ----</pre></dt>
-<dd>$desc</dd>
-EOT;
+  // Re-discover plugins, when the admin visits the weights configuration form.
+  $info->flushCaches();
+
+  $form['crumbs_weights'] = array(
+    '#title' => t('Weights'),
+    // Fetching the default value is not automated by system_settings_form().
+    '#default_value' => $info->userWeights,
+    '#crumbs_plugin_info' => $info,
+  );
+
+  switch ($type) {
+    case 'textual':
+      // You need to enable crumbs_labs to get this.
+      $form['crumbs_weights']['#type'] = 'crumbs_weights_textual';
+      break;
+    case 'expansible':
+      // You need to enable crumbs_labs to get this.
+      $form['crumbs_weights']['#type'] = 'crumbs_weights_expansible';
+      break;
+    case 'tabledrag':
+    default:
+      $form['crumbs_weights']['#type'] = 'crumbs_weights_tabledrag';
   }
-  $text_placeholders['!text_sections'] = '<dl>' . $text_sections . '</dl>';
 
-  $text_footnotes = '';
-  foreach (array(
-    '*' => 'The order of criteria in this section has no meaning, and is not saved.
-Instead, whenever the form is displayed, these criteria are sorted by name.',
-    '**' => 'Whatever you put in these sections, is not saved. Instead, whenever
-the form is displayed, the section will be filled with any criteria that are
-not already in "enabled" or "disabled", sorted by name.',
-  ) as $title => $desc) {
-    $desc = t($desc);
-    $text_footnotes .= <<<EOT
-<p>($title) $desc</p>
-EOT;
-  }
-  $text_placeholders['!text_footnotes'] = '<dl>' . $text_footnotes . '</dl>';
-
-  $text = <<<EOT
-<p>To build a breadcrumb trail, Crumbs takes the system path of the current
-page, and determines a "parent path". This process is repeated with the parent,
-until it arrives at the front page path, or until a loop is detected.</p>
-<p>There are plenty of criteria available, that Crumbs can use to find a parent
-path. This settings form allows to enable, disable and prioritize these
-criteria, by moving (cut+paste) lines of text up and down.</p>
-<p>The textarea has these sections:</p>
-!text_sections
-!text_footnotes
-<p>Labels on the criteria have no meaning when you save the form, and are reset
-whenever the form is displayed.</p>
-EOT;
-  $form['instructions'] = array(
-    '#markup' => t($text, $text_placeholders),
-  );
-
-  $form['settings'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Order of criteria for parent-finding.'),
-    '#rows' => 24,
-    // TODO: Add a CSS file? Or totally revamp this settings form?
-    '#attributes' => array('style' => 'font-family:"Courier new", monospace;'),
-  );
-  $form['show_current_page'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show the current page at the end of the breadcrumb trail.'),
-    '#default_value' => variable_get('crumbs_show_current_page', FALSE),
-  );
-
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => 'Save',
-  );
-
-  $form['settings']['#default_value'] = _crumbs_get_default_text();
-
+  $form = system_settings_form($form);
+  $form['#submit'][] = '_crumbs_admin_flush_cache';
   return $form;
 }
 
+/**
+ * The form displayed on admin/structure/crumbs/display
+ */
+function crumbs_admin_display_form() {
+  $form = array();
 
-function _crumbs_get_default_text() {
-
-  list($plugins, $disabled_keys) = crumbs_get_plugins();
-  list($available_keys, $keys_by_plugin) = _crumbs_load_available_keys($plugins);
-  $weights = crumbs_get_weights();
-
-  return _crumbs_build_default_text($available_keys, $keys_by_plugin, $weights, $disabled_keys);
-}
-
-
-function _crumbs_build_default_text(array $available_keys, array $keys_by_plugin, array $weights, array $disabled_keys) {
-
-  $key_lengths = array();
-  foreach ($available_keys as $key => $title) {
-    $key_lengths[] = strlen($key);
-  }
-  $ideal_length = _crumbs_admin_find_ideal_length($key_lengths);
-
-  foreach ($available_keys as $key => $title) {
-    $string = $key;
-    if (is_string($title)) {
-      if (strlen($string) < $ideal_length) {
-        $string .= str_repeat(' ', $ideal_length - strlen($string));
-      }
-      $string .= ' - '. $title;
-    }
-    $available_keys[$key] = $string;
-  }
-
-  $lines = array(
-    'inherit' => $available_keys,
-    'disabled_by_default' => array(),
-    'enabled' => array(),
-    'disabled' => array(),
+  // Home link settings
+  $form['home_link_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Home link settings'),
+  );
+  $form['home_link_settings']['crumbs_show_front_page'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show the home page link (recommended).'),
+    '#default_value' => variable_get('crumbs_show_front_page', TRUE),
+  );
+  $form['home_link_settings']['crumbs_home_link_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Home link title'),
+    '#default_value' => variable_get('crumbs_home_link_title', 'Home'),
+    '#description' => t('Title of the link that points to the front page.'),
+    '#size' => 30,
   );
 
-  foreach ($weights as $key => $weight) {
-    $section = ($weight === FALSE) ? 'disabled' : 'enabled';
-    $string = $key;
-    if (isset($available_keys[$key])) {
-      $string = $available_keys[$key];
+  // Current page settings
+  $form['current_page_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Current page settings'),
+  );
+  $form['current_page_settings']['crumbs_show_current_page'] = array(
+    '#type' => 'radios',
+    '#title' => t('Show the current page at the end of the breadcrumb trail?'),
+    '#options' => array(
+      // @todo Smarter option values
+      FALSE => t('Hide.'),
+      CRUMBS_TRAILING_SEPARATOR => t('Hide, but end the trail with a separator.'),
+      CRUMBS_SHOW_CURRENT_PAGE => t('Show, as plain text.'),
+      CRUMBS_SHOW_CURRENT_PAGE_SPAN => t('Show, wrapped in !tags tags.', array(
+        '!tags' =>  '<code>&lt;span class="crumbs-current-page"&gt;</code>',
+      )),
+      CRUMBS_SHOW_CURRENT_PAGE_LINK => t('Show, as a link.'),
+    ),
+    '#default_value' => variable_get('crumbs_show_current_page', FALSE),
+  );
+
+  // Visibility settings
+  $form['visibility_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Breadcrumb visibility settings'),
+  );
+  $home = t('Home');
+  $current = t('Current page');
+  $intermediate = t('Intermediate page');
+  $form['visibility_settings']['crumbs_minimum_trail_items'] = array(
+    '#type' => 'radios',
+    '#title' => t('Shortest visible breadcrumb'),
+    '#description' => t('If the trail has fewer items than specified here, the breadcrumb will be hidden.'),
+    '#default_value' => variable_get('crumbs_minimum_trail_items', 2),
+    '#options' => array(
+      1 => "($home)",
+      2 => "(<a href='#'>$home</a>) &raquo; ($current)",
+      3 => "(<a href='#'>$home</a>) &raquo; <a href='#'>$intermediate</a> &raquo; ($current)",
+    ),
+  );
+
+  // Separator settings
+  $form['separator_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Separator settings'),
+  );
+  $form['separator_settings']['crumbs_separator_span'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Wrap the separator in !tags tags:', array(
+        '!tags' => '<code>&lt;span class="crumbs-separator"&gt;</code>',
+      )),
+    '#default_value' => (bool)variable_get('crumbs_separator_span', FALSE),
+  );
+  $separator_notes = '';
+  foreach (array(
+    'A subset of HTML is accepted.',
+    'Special characters should be specified as htmlentities, e.g. "&amp;raquo;".',
+    'Spaces should be added around the separator symbol.',
+    'The setting will only work in themes where the Crumbs implementation of theme_breadcrumb() is used.',
+  ) as $note) {
+    $separator_notes .= '<li>' . str_replace("\n", '<br/>', t($note)) . '</li>';
+  }
+  $separator_notes = '<ul>' . $separator_notes . '</ul>';
+  $separator_desc = '<p>' . t('A custom separator symbol, such as " &amp;raquo; " ( &raquo; ) or " &amp;gt; " ( &gt; ).') . '</p>';
+  $form['separator_settings']['crumbs_separator'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Custom separator HTML'),
+    '#description' => $separator_desc,
+    '#default_value' => variable_get('crumbs_separator', ' &raquo; '),
+    '#element_validate' => array('_crumbs_validate_separator_xss'),
+  );
+  $form['separator_settings']['notes'] = array(
+    '#type' => 'markup',
+    '#markup' => '<p>' . t('Notes:') . '</p>' . $separator_notes,
+  );
+
+  // Theme override settings
+  $theme_override_options = array('theme_breadcrumb' => array());
+  $themes_need_flush = FALSE;
+  $originals = variable_get('crumbs_original_theme_breadcrumb', array());
+  foreach (list_themes() as $theme_name => $theme_obj) {
+    if ('1' !== '' . $theme_obj->status) {
+      // Theme is disabled.
+      continue;
     }
-    else if ($key !== '*') {
-      // an orphan setting.
-      if (strlen($string) < $ideal_length) {
-        $string .= str_repeat(' ', $ideal_length - strlen($string));
-      }
-      $string .= '   (orphan rule)';
+    $path = 'admin/appearance/settings/' . $theme_name;
+    $link = l($theme_obj->info['name'], $path);
+    if (!isset($originals[$theme_name])) {
+      $f = 'theme_breadcrumb';
+      $link .= '?';
+      $themes_need_flush = TRUE;
     }
-    $lines[$section][$key] = $string;
-    unset($lines['inherit'][$key]);
+    else {
+      $f = $originals[$theme_name];
+    }
+    $theme_override_options[$f][$theme_name] = $link;
   }
 
-  foreach ($disabled_keys as $key => $disabled) {
-    if (isset($lines['inherit'][$key])) {
-      $lines['disabled_by_default'][$key] = $lines['inherit'][$key];
-      unset($lines['inherit'][$key]);
+  foreach ($theme_override_options as $f => $theme_links) {
+    $option_text = t('Override !theme_breadcrumb', array(
+      '!theme_breadcrumb' => $f . '()',
+    ));
+    if (!empty($theme_links)) {
+      $option_text .= ': ' . implode(', ', $theme_links);
     }
+    $theme_override_options[$f] = $option_text;
   }
 
-  foreach ($keys_by_plugin as $plugin_key => $keys_for_this_plugin) {
-    $lines['inherit'][$plugin_key .':NEWLINE:'] = "";
+  if ($themes_need_flush) {
+    $theme_override_options['theme_breadcrumb'] .= '<br/>' .
+      t('The "?" indicates that the theme registry has not been rebuilt for the respective theme yet, so we do not know if it has its own implementation of theme_breadcrumb().');
   }
 
-  ksort($lines['inherit']);
-  foreach ($lines['inherit'] as $key => $line) {
-    if (isset($prev) && $prev === '' && $line === '') {
-      unset($lines['inherit'][$key]);
-    }
-    $prev = $line;
+  if (!empty($theme_override_options)) {
+    $form['theme_override_settings']['crumbs_override_theme_breadcrumb'] = array(
+      '#type' => 'checkboxes',
+      '#options' => $theme_override_options,
+      '#html' => TRUE,
+      '#default_value' => variable_get('crumbs_override_theme_breadcrumb', array('theme_breadcrumb')),
+      '#title' => t('Override theme implementations'),
+    );
+    $form['theme_override_settings']['notes'] = array(
+      '#type' => 'markup',
+      '#markup' =>
+        '<p>' . t('Use !crumbs_module_implementation instead of the respective theme implementation.', array(
+            '!crumbs_module_implementation' => '<code>crumbs_theme_breadcrumb()</code>',
+          )) . '<br/>' .
+        t('This may conflict with some themes.') . '</p>',
+    );
+  }
+  if (!empty($form['theme_override_settings'])) {
+    $form['theme_override_settings'] += array(
+      '#type' => 'fieldset',
+      '#title' => t('Theme override settings'),
+    );
   }
 
-  return "\n\n"
-    . implode("\n", $lines['enabled'])
-    . "\n\n\n---- disabled ----\n\n". implode("\n", $lines['disabled'])
-    . "\n\n\n---- disabled by default ----\n\n". implode("\n", $lines['disabled_by_default'])
-    . "\n\n\n---- inherit ----\n\n". implode("\n", $lines['inherit'])
-    . "\n\n"
-  ;
+  $form = system_settings_form($form);
+  $form['#submit'][] = '_crumbs_admin_display_submit_flush_cache';
+  return $form;
 }
-
 
 /**
- * This algorithm is copied 1:1 from blockadminlight
+ * Element validate callback for separator string.
+ *
+ * @param array $element
+ * @param array $form_state
  */
-function _crumbs_admin_find_ideal_length(array $key_lengths, $factor = 30) {
-  sort($key_lengths, SORT_NUMERIC);
-  $n = count($key_lengths);
-  $length = 0;
-  $best_length = 0;
-  $cost = $n * $factor;
-  $best_cost = $cost;
-  for ($i=0; $i<$n; ++$i) {
-    $increment = $key_lengths[$i] - $length;
-    $length = $key_lengths[$i];
-    $cost += $i * $increment;
-    $cost -= $factor;
-    if ($cost < $best_cost) {
-      $best_cost = $cost;
-      $best_length = $length;
-    }
+function _crumbs_validate_separator_xss($element, $form_state) {
+  $string = $element['#value'];
+  $filtered = filter_xss_admin($string);
+  if ($string !== $filtered) {
+    form_error($element, t('%name contains unsafe HTML. Maybe you meant %safe instead.', array(
+      '%name' => $element['#title'],
+      '!safe' => '"<code>' . check_plain($filtered) . '</code>"',
+    )));
   }
-  return $best_length;
 }
 
+/**
+ * Additional submit handler for crumbs_admin_display_form, that will flush the
+ * crumbs-related caches.
+ *
+ * @param array $form
+ */
+function _crumbs_admin_display_submit_flush_cache($form) {
+  _crumbs_admin_flush_cache();
 
-function crumbs_admin_form_submit($form, &$form_state) {
-  $weights = crumbs_get_weights();
-  asort($weights);
-  list($plugins, $disabled_keys) = crumbs_get_plugins();
-  list($available_keys, $keys_by_plugin) = _crumbs_load_available_keys($plugins);
-
-  $weights = array();
-
-  $text = $form_state['values']['settings'];
-  $lines = explode("\n", $text);
-  $weight = 0;
-  foreach ($lines as $line) {
-    $line = trim($line);
-    list($key, $title) = explode(' ', $line, 2) + array(NULL, NULL);
-    if (isset($available_keys[$key])) {
-      $weights[$key] = $weight;
-      ++$weight;
-    }
-    elseif (preg_match('/^-/', $line)) {
-      if ($weight !== FALSE) {
-        $weight = FALSE;
-      }
-      else {
-        break;
-      }
-    }
+  // Check if the theme registry needs rebuild.
+  if (_crumbs_admin_display_submit_checkboxes_changed($form['theme_override_settings']['crumbs_override_theme_breadcrumb'])) {
+    // Flush theme registry.
+    // See _admin_menu_flush_cache() in admin_menu module.
+    system_rebuild_theme_data();
+    drupal_theme_rebuild();
   }
-
-  variable_set('crumbs_weights', $weights);
-  variable_set('crumbs_show_current_page', $form_state['values']['show_current_page']);
 }
 
-
-function _crumbs_load_available_keys(array $plugins) {
-  // we can't use the plugin engine,
-  // or else we would miss disabled plugins.
-  $plugin_operation = new crumbs_PluginOperation_describe();
-  foreach ($plugins as $plugin_key => $plugin) {
-    $plugin_operation->invoke($plugin, $plugin_key);
+/**
+ * Determine if a submitted checkboxes element value has changed.
+ *
+ * @param array $element
+ *   Form element with "#type" = "checkboxes".
+ *
+ * @return bool
+ *   TRUE, if the value has changed. That is, if some checkboxes have been
+ *   checked or unchecked.
+ */
+function _crumbs_admin_display_submit_checkboxes_changed($element) {
+  $before = $element['#default_value'];
+  $after = $element['#value'];
+  foreach ($before as $key => $value) {
+    if ($key === $value) {
+      if (!isset($after[$key])) {
+        // Found a difference.
+        return TRUE;
+      }
+      unset($after[$key]);
+    }
   }
-  return array($plugin_operation->getKeys(), $plugin_operation->getKeysByPlugin());
+  return !empty($after);
 }

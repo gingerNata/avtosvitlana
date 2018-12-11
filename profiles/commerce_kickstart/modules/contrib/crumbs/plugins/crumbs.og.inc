@@ -1,10 +1,11 @@
 <?php
 
-
 /**
  * Implements hook_crumbs_plugins().
  *
  * This is the version for the og-7.x-1.x branch.
+ *
+ * @param crumbs_InjectedAPI_hookCrumbsPlugins $api
  */
 function og_crumbs_plugins($api) {
   $api->multiPlugin('group_post');
@@ -16,13 +17,15 @@ function og_crumbs_plugins($api) {
     new og_CrumbsMultiPlugin_my_groups_overview('user-groups'));
 }
 
-
 /**
  * Use the group node as a parent for group posts.
  * The priorities can be configured per group content type.
  */
 class og_CrumbsMultiPlugin_group_post implements crumbs_MultiPlugin {
 
+  /**
+   * {@inheritdoc}
+   */
   function describe($api) {
     $types = node_type_get_types();
     foreach ($types as $type) {
@@ -33,12 +36,12 @@ class og_CrumbsMultiPlugin_group_post implements crumbs_MultiPlugin {
   }
 
   function findParent__node_x($path, $item) {
-    $node = $item['map'][1];
-    // Load the node if it hasn't been loaded due to a missing wildcard loader.
-    $node = is_numeric($node) ? node_load($node) : $node;
+    if (FALSE === $node = crumbs_Util::itemExtractEntity($item, 'node', 1)) {
+      return NULL;
+    }
 
     $items = field_get_items('node', $node, 'group_audience');
-    if ($items) {
+    if (is_array($items)) {
       foreach ($items as $item) {
         $row = db_query("SELECT * FROM {og} WHERE gid = :gid", array(':gid' => $item['gid']))->fetchObject();
         if ($row && $row->entity_type === 'node') {
@@ -47,11 +50,18 @@ class og_CrumbsMultiPlugin_group_post implements crumbs_MultiPlugin {
         }
       }
     }
+
+    return NULL;
   }
 
   /**
    * This method can be overridden by custom plugins that inherit from this one,
    * e.g. to set a different parent for group events than for group discussions.
+   *
+   * @param int $group_nid
+   * @param object $group_post
+   *
+   * @return string
    */
   protected function getParentPath($group_nid, $group_post) {
     return 'node/' . $group_nid;
@@ -67,8 +77,8 @@ class og_CrumbsMultiPlugin_group_post implements crumbs_MultiPlugin {
      * }
      */
   }
-}
 
+}
 
 /**
  * Make $groups_overview_path the parent path for group nodes.
@@ -86,6 +96,9 @@ class og_CrumbsMultiPlugin_groups_overview implements crumbs_MultiPlugin {
     $this->groupsOverviewPath = $groups_overview_path;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   function describe($api) {
     $types = node_type_get_types();
     foreach ($types as $type) {
@@ -95,35 +108,51 @@ class og_CrumbsMultiPlugin_groups_overview implements crumbs_MultiPlugin {
     }
   }
 
+  /**
+   * @param string $path
+   * @param array $item
+   *
+   * @return array|null
+   */
   function findParent__node_x($path, $item) {
-    $node = $item['map'][1];
-    // Load the node if it hasn't been loaded due to a missing wildcard loader.
-    $node = is_numeric($node) ? node_load($node) : $node;
+    if (FALSE === $node = crumbs_Util::itemExtractEntity($item, 'node', 1)) {
+      return NULL;
+    }
 
     $items = field_get_items('node', $node, 'group_group');
     if ($items) {
       return array($node->type => 'group-list');
     }
-  }
-}
 
+    return NULL;
+  }
+
+}
 
 /**
  * Make t('Groups') the title for '/group-list'.
  */
-class og_CrumbsMonoPlugin_groups_overview_title implements crumbs_MonoPlugin {
+class og_CrumbsMonoPlugin_groups_overview_title implements crumbs_MonoPlugin_FindTitleInterface {
 
+  /**
+   * {@inheritdoc}
+   */
   function describe($api) {
     return t('Set "Group" as the title for item for "group-list".');
   }
 
+  /**
+   * {@inheritdoc}
+   */
   function findTitle($path, $item) {
     if ($item['route'] === 'group-list') {
       return t('Groups');
     }
-  }
-}
 
+    return NULL;
+  }
+
+}
 
 /**
  * Make $my_groups_path the parent path for group nodes where the current user
@@ -132,6 +161,9 @@ class og_CrumbsMonoPlugin_groups_overview_title implements crumbs_MonoPlugin {
  */
 class og_CrumbsMultiPlugin_my_groups_overview implements crumbs_MultiPlugin {
 
+  /**
+   * @var string
+   */
   protected $myGroupsPath;
 
   /**
@@ -143,6 +175,9 @@ class og_CrumbsMultiPlugin_my_groups_overview implements crumbs_MultiPlugin {
     $this->myGroupsPath = $my_groups_path;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   function describe($api) {
     $types = node_type_get_types();
     foreach ($types as $type) {
@@ -152,10 +187,19 @@ class og_CrumbsMultiPlugin_my_groups_overview implements crumbs_MultiPlugin {
     }
   }
 
+  /**
+   * @param string $path
+   *   The path that we want to find a parent for.
+   * @param array $item
+   *   Loaded router item, as returned from crumbs_get_router_item()
+   *
+   * @return array
+   *   Parent path candidates
+   */
   function findParent__node_x($path, $item) {
-    $node = $item['map'][1];
-    // Load the node if it hasn't been loaded due to a missing wildcard loader.
-    $node = is_numeric($node) ? node_load($node) : $node;
+    if (FALSE === $node = crumbs_Util::itemExtractEntity($item, 'node', 1)) {
+      return NULL;
+    }
 
     if (og_is_group_type('node', $node->type)) {
       $group = og_get_group('node', $node->nid);
@@ -165,5 +209,8 @@ class og_CrumbsMultiPlugin_my_groups_overview implements crumbs_MultiPlugin {
         }
       }
     }
+
+    return NULL;
   }
+
 }

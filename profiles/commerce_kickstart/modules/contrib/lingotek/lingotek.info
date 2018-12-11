@@ -43,12 +43,15 @@ files[] = tests/lingotek.access.test
 files[] = tests/lingotek.setup.test
 
 files[] = lingotek_views_handler_workbench_link.inc
+files[] = lingotek_views_handler_source_status.inc
+files[] = lingotek_views_handler_target_status.inc
+files[] = lingotek_views_handler_source_status_formatted.inc
+files[] = lingotek_views_handler_target_status_formatted.inc
 
 stylesheets[all][] = style/base.css
 
-; Information added by Drupal.org packaging script on 2017-02-15
-version = "7.x-7.19"
+; Information added by Drupal.org packaging script on 2018-09-26
+version = "7.x-7.28"
 core = "7.x"
 project = "lingotek"
-datestamp = "1487181189"
-
+datestamp = "1537994886"

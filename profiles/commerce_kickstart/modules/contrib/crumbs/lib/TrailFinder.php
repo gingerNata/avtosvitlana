@@ -3,21 +3,43 @@
 
 class crumbs_TrailFinder {
 
+  /**
+   * @var crumbs_ParentFinder
+   */
   protected $parentFinder;
 
-  function __construct($parent_finder) {
+  /**
+   * @var crumbs_Router;
+   */
+  protected $router;
+
+  /**
+   * @param crumbs_ParentFinder $parent_finder
+   * @param crumbs_Router $router
+   */
+  function __construct($parent_finder, $router) {
     $this->parentFinder = $parent_finder;
+    $this->router = $router;
+  }
+
+  /**
+   * @param string $path
+   * @return array
+   */
+  function getForPath($path) {
+    return $this->buildTrail($path);
   }
 
   /**
    * Build the raw trail.
+   *
+   * @param string $path
+   * @return array
    */
   function buildTrail($path) {
-    $path = drupal_get_normal_path($path);
+    $path = $this->router->getNormalPath($path);
     $trail_reverse = array();
-    $front_normal_path = drupal_get_normal_path(variable_get('site_frontpage', 'node'));
-    $front_menu_item = crumbs_get_router_item($front_normal_path);
-    $front_menu_item['href'] = '<front>';
+    $front_normal_path = $this->router->getFrontNormalPath();
     while (strlen($path) && $path !== '<front>' && $path !== $front_normal_path) {
       if (isset($trail_reverse[$path])) {
         // We found a loop! To prevent infinite recursion, we
@@ -27,12 +49,13 @@ class crumbs_TrailFinder {
         }
         break;
       }
-      $item = crumbs_get_router_item($path);
+      /** @var array|null $item */
+      $item = $this->router->getRouterItem($path);
       // If this menu item is a default local task and links to its parent,
       // skip it and start the search from the parent instead.
       if ($item && ($item['type'] & MENU_LINKS_TO_PARENT)) {
         $path = $item['tab_parent_href'];
-        $item = crumbs_get_router_item($item['tab_parent_href']);
+        $item = $this->router->getRouterItem($item['tab_parent_href']);
       }
 
       // For a path to be included in the trail, it must resolve to a valid
@@ -49,7 +72,25 @@ class crumbs_TrailFinder {
       $path = $parent_path;
     }
     unset($trail_reverse['<front>']);
-    $trail_reverse[$front_normal_path] = $front_menu_item;
+
+    // Only prepend a frontpage item, if the configured frontpage is valid.
+    $front_menu_item = $this->router->getRouterItem($front_normal_path);
+    if (isset($front_menu_item)) {
+      $front_menu_item['href'] = '<front>';
+      $trail_reverse[$front_normal_path] = $front_menu_item;
+    }
+    else {
+      $message_raw = 'Your current setting for !site_frontpage seems to be invalid.';
+      $message_replacements = array(
+        '!site_frontpage' => '<em>' . l(t('Default front page'), 'admin/config/system/site-information') . '</em>',
+      );
+      watchdog('crumbs', $message_raw, $message_replacements);
+      if (user_access('administer site configuration')) {
+        drupal_set_message(t($message_raw, $message_replacements), 'warning');
+      }
+    }
+
     return array_reverse($trail_reverse);
   }
+
 }

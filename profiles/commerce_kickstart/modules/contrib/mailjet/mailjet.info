@@ -1,5 +1,5 @@
 name = Mailjet
-description = "Send your emails by your Mailjet API."
+description = "Send your emails by your MailJet API."
 core = 7.x
 package = MailJet
 configure = admin/config/system/mailjet
@@ -7,9 +7,8 @@ files[] = includes/mailjet.mail.inc
 ;dependencies[] = libraries
 dependencies[] = views_bulk_operations
 
-; Information added by Drupal.org packaging script on 2017-02-13
-version = "7.x-2.12"
+; Information added by Drupal.org packaging script on 2018-06-08
+version = "7.x-2.18"
 core = "7.x"
 project = "mailjet"
-datestamp = "1486998188"
-
+datestamp = "1528458188"

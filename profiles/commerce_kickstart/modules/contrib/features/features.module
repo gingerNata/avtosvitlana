@@ -367,7 +367,7 @@ function features_modules_enabled($modules) {
   // Go through all modules and gather features that can be enabled.
   $items = array();
   foreach ($modules as $module) {
-    if ($feature = features_load_feature($module, TRUE)) {
+    if ($feature = features_load_feature($module)) {
       $items[$module] = array_keys($feature->info['features']);
     }
   }
@@ -503,6 +503,7 @@ function features_load_feature($name, $reset = FALSE) {
         $features[$name]->name = $name;
         $features[$name]->filename = drupal_get_path('module', $name) . '/' . $name . '.module';
         $features[$name]->type = 'module';
+        $features[$name]->status = module_exists($name);
         $features[$name]->info = $info + $defaults;
       }
     }
@@ -858,10 +859,6 @@ function features_get_component_map($key = NULL, $reset = FALSE) {
     $map = array();
     $features = features_get_features(NULL, $reset);
     foreach ($features as $feature) {
-      // Skip hidden features.
-      if (!empty($feature->info['hidden'])) {
-        continue;
-      }
       foreach ($feature->info['features'] as $type => $components) {
         if (!isset($map[$type])) {
           $map[$type] = array();

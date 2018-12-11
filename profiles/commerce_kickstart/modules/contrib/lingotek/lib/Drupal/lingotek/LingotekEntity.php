@@ -149,7 +149,8 @@ class LingotekEntity implements LingotekTranslatableEntity {
     }
     elseif (isset($this->entity->$property_name)) {
       $property = $this->entity->$property_name;
-    } else {
+    }
+    else {
       $val = lingotek_keystore($this->getEntityType(), $this->getId(), $property_name);
       $property = ($val !== FALSE) ? $val : $property;
     }
@@ -269,6 +270,74 @@ class LingotekEntity implements LingotekTranslatableEntity {
     return lingotek_entity_download_triggered($this->entity, $this->entity_type, $lingotek_locale);
   }
 
+ /**
+  * Checks if a document has any translatable content in the body or custom fields
+  *
+  * @return boolean
+  *  TRUE if the document is empty, FALSE otherwise.
+  */
+  public function isEmpty() {
+    $filter_function = function ($value) {
+        //Title field cannot be empty by default so exclude from check
+        $exclude_fields = array('title_field');
+        $exclude_modules = array('paragraphs');
+        $is_in_exclude_fields = in_array($value['field_name'], $exclude_fields);
+        $is_in_exclude_modules = in_array($value['widget']['module'], $exclude_modules);
+
+        if( $is_in_exclude_fields || $is_in_exclude_modules) {
+            return FALSE;
+        }
+
+        return TRUE;
+    };
+
+    $bundle = $this->getBundle();
+
+    //Make sure entity menu links have title set as translatable for Lingotek
+    if ($this->entity_type === 'menu_link') {
+        $enabled_fields = variable_get('lingotek_enabled_fields');
+        return in_array('title', $enabled_fields['menu_link'][$bundle]) ? FALSE : TRUE;
+    }
+
+    $field_names = field_info_instances($this->entity_type, $bundle);
+
+    //Only need field names so filter out unwanted modules and fields and strip out the rest of the information
+    $filtered_field_names = array_keys(array_filter($field_names, $filter_function));
+
+    foreach ($filtered_field_names as $field_name) {
+        if ( property_exists($this->entity, $field_name) && !$this->isFieldEmpty($this->entity->{$field_name}) ) {
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Checks the given field to see if the field has any translatable content
+   *
+   * @param type $field
+   * @return boolean
+   *  TRUE if the document doesn't have any translatable content, FALSE otherwise
+   */
+  private function isFieldEmpty($field) {
+    if (empty($field)) {
+        return TRUE;
+    }
+
+    foreach ($field as $field_content) {
+        foreach ($field_content as $language_content) {
+            if (array_key_exists('value', $language_content)) {
+                if (trim(strip_tags($language_content['value'])) !== '') {
+                    return FALSE;
+                }
+            }
+        }
+    }
+
+    return TRUE;
+  }
+
   public function getWorkflowId() {
     return $this->entity->lingotek['workflow_id'];
   }
@@ -305,6 +374,10 @@ class LingotekEntity implements LingotekTranslatableEntity {
       LingotekLog::info('Did not find a label for @entity_type #!entity_id, using default label.',
           array('@entity_type' => $this->entity_type, '@entity_id' => $this->entity_id));
       $this->title = $this->entity_type . " #" . $this->entity_id;
+      if ($this->entity_type === 'paragraphs_item') {
+        list($parent_id, $parent_title) = lingotek_get_paragraph_parent_info($this->entity_type, $this->entity_id);
+        $this->title .= ' (Host entity: ' . $parent_title . ')';
+      }
     }
 
     return $this->title;
@@ -343,6 +416,17 @@ class LingotekEntity implements LingotekTranslatableEntity {
     return $id;
   }
 
+    /**
+   * Return the bundle for the entity
+   *
+   * @return string
+   *   The bundle associated with this object
+   */
+  public function getBundle() {
+    list(, , $bundle) = lingotek_entity_extract_ids($this->entity_type, $this->entity);
+    return $bundle;
+  }
+
   public function getSourceLocale() {
     if ($this->entity_type == 'taxonomy_term') {
       $vocabulary = taxonomy_vocabulary_machine_name_load($this->vocabulary_machine_name);
@@ -352,8 +436,8 @@ class LingotekEntity implements LingotekTranslatableEntity {
       }
     }
     if ($this->entity_type == 'bean') {
-      // Assume all block entities are created in the site's default language.
-      return Lingotek::convertDrupal2Lingotek(language_default()->language);
+      $bean_language = lingotek_get_bean_source($this->entity->bid);
+      return Lingotek::convertDrupal2Lingotek($bean_language);
     }
     if ($this->entity_type == 'group') {
       $group_language = lingotek_get_group_source($this->entity->gid);
