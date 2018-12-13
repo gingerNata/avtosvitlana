@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_block.strongarm.inc

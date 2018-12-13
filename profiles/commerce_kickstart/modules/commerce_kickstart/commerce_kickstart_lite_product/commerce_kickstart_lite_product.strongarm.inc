@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_lite_product.strongarm.inc
@@ -63,17 +64,29 @@ function commerce_kickstart_lite_product_strongarm() {
       'node_token' => array(
         'custom_settings' => FALSE,
       ),
+      'add_to_cart_confirmation_view' => array(
+        'custom_settings' => TRUE,
+      ),
+      'commerce_discount_offer_token' => array(
+        'custom_settings' => FALSE,
+      ),
+      'node_revision' => array(
+        'custom_settings' => FALSE,
+      ),
+      'node_products_main_page' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
         'sku' => array(
-          'weight' => '-10',
+          'weight' => '0',
         ),
         'title' => array(
           'weight' => '-5',
         ),
         'status' => array(
-          'weight' => '35',
+          'weight' => '6',
         ),
       ),
       'display' => array(
@@ -90,6 +103,18 @@ function commerce_kickstart_lite_product_strongarm() {
             'weight' => '1',
             'visible' => TRUE,
           ),
+          'node_teaser' => array(
+            'weight' => '2',
+            'visible' => TRUE,
+          ),
+          'product_in_cart' => array(
+            'weight' => '2',
+            'visible' => TRUE,
+          ),
+          'node_products_main_page' => array(
+            'weight' => '5',
+            'visible' => FALSE,
+          ),
         ),
         'title' => array(
           'default' => array(
@@ -100,18 +125,34 @@ function commerce_kickstart_lite_product_strongarm() {
             'weight' => '1',
             'visible' => TRUE,
           ),
+          'node_products_main_page' => array(
+            'weight' => '1',
+            'visible' => TRUE,
+          ),
         ),
         'status' => array(
           'default' => array(
-            'weight' => '6',
+            'weight' => '4',
             'visible' => FALSE,
           ),
           'node_product_list' => array(
-            'weight' => '4',
+            'weight' => '5',
             'visible' => FALSE,
           ),
           'add_to_cart_confirmation_view' => array(
             'weight' => '2',
+            'visible' => FALSE,
+          ),
+          'node_teaser' => array(
+            'weight' => '3',
+            'visible' => TRUE,
+          ),
+          'product_in_cart' => array(
+            'weight' => '3',
+            'visible' => FALSE,
+          ),
+          'node_products_main_page' => array(
+            'weight' => '4',
             'visible' => FALSE,
           ),
         ),
@@ -141,64 +182,150 @@ function commerce_kickstart_lite_product_strongarm() {
       'token' => array(
         'custom_settings' => FALSE,
       ),
+      'revision' => array(
+        'custom_settings' => FALSE,
+      ),
+      'products_main_page' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
-      'form' => array(),
+      'form' => array(
+        'path' => array(
+          'weight' => '12',
+        ),
+        'metatags' => array(
+          'weight' => '13',
+        ),
+        'xmlsitemap' => array(
+          'weight' => '0',
+        ),
+      ),
       'display' => array(
         'product:sku' => array(
           'default' => array(
+            'weight' => '4',
+            'visible' => TRUE,
+          ),
+          'product_list' => array(
+            'weight' => '16',
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
             'weight' => '7',
             'visible' => FALSE,
           ),
-          'product_list' => array(
-            'weight' => '4',
+          'products_main_page' => array(
+            'weight' => '6',
             'visible' => FALSE,
           ),
         ),
         'product:title' => array(
           'default' => array(
-            'weight' => '6',
+            'weight' => '30',
+            'visible' => FALSE,
+          ),
+          'product_list' => array(
+            'weight' => '10',
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '8',
+            'visible' => FALSE,
+          ),
+          'products_main_page' => array(
+            'weight' => '17',
             'visible' => FALSE,
           ),
         ),
         'product:status' => array(
           'default' => array(
-            'weight' => '8',
+            'weight' => '27',
             'visible' => FALSE,
           ),
           'product_list' => array(
-            'weight' => '8',
+            'weight' => '17',
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '16',
+            'visible' => FALSE,
+          ),
+          'products_main_page' => array(
+            'weight' => '14',
             'visible' => FALSE,
           ),
         ),
         'product:commerce_price' => array(
           'default' => array(
-            'weight' => '1',
+            'weight' => '2',
             'visible' => TRUE,
           ),
           'product_list' => array(
-            'weight' => '2',
+            'weight' => '4',
+            'visible' => TRUE,
+          ),
+          'teaser' => array(
+            'weight' => '4',
+            'visible' => TRUE,
+          ),
+          'products_main_page' => array(
+            'weight' => '4',
             'visible' => TRUE,
           ),
         ),
         'product:field_images' => array(
           'default' => array(
-            'weight' => '4',
+            'weight' => '0',
             'visible' => TRUE,
           ),
           'product_list' => array(
             'weight' => '0',
             'visible' => TRUE,
           ),
+          'teaser' => array(
+            'weight' => '0',
+            'visible' => TRUE,
+          ),
+          'products_main_page' => array(
+            'weight' => '0',
+            'visible' => TRUE,
+          ),
         ),
         'product:title_field' => array(
           'product_list' => array(
-            'weight' => '3',
+            'weight' => '15',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '5',
+            'weight' => '29',
             'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '6',
+            'visible' => FALSE,
+          ),
+          'products_main_page' => array(
+            'weight' => '16',
+            'visible' => FALSE,
+          ),
+        ),
+        'product:field_availability' => array(
+          'default' => array(
+            'weight' => '3',
+            'visible' => TRUE,
+          ),
+          'product_list' => array(
+            'weight' => '3',
+            'visible' => TRUE,
+          ),
+          'teaser' => array(
+            'weight' => '3',
+            'visible' => TRUE,
+          ),
+          'products_main_page' => array(
+            'weight' => '3',
+            'visible' => TRUE,
           ),
         ),
       ),
@@ -249,7 +376,7 @@ function commerce_kickstart_lite_product_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_punctuation_hyphen';
-  $strongarm->value = 1;
+  $strongarm->value = '1';
   $export['pathauto_punctuation_hyphen'] = $strongarm;
 
   $strongarm = new stdClass();

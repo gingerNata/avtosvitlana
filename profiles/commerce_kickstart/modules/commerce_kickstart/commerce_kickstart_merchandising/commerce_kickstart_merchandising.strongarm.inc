@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_merchandising.strongarm.inc
@@ -16,6 +17,48 @@ function commerce_kickstart_merchandising_strongarm() {
   $strongarm->name = 'comment_ad_push';
   $strongarm->value = '0';
   $export['comment_ad_push'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_anonymous_ad_push';
+  $strongarm->value = 0;
+  $export['comment_anonymous_ad_push'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_mode_ad_push';
+  $strongarm->value = 1;
+  $export['comment_default_mode_ad_push'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_per_page_ad_push';
+  $strongarm->value = '50';
+  $export['comment_default_per_page_ad_push'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_form_location_ad_push';
+  $strongarm->value = 1;
+  $export['comment_form_location_ad_push'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_ad_push';
+  $strongarm->value = '1';
+  $export['comment_preview_ad_push'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_subject_field_ad_push';
+  $strongarm->value = 1;
+  $export['comment_subject_field_ad_push'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -46,6 +89,15 @@ function commerce_kickstart_merchandising_strongarm() {
       'form' => array(
         'title' => array(
           'weight' => '0',
+        ),
+        'metatags' => array(
+          'weight' => '7',
+        ),
+        'path' => array(
+          'weight' => '5',
+        ),
+        'xmlsitemap' => array(
+          'weight' => '6',
         ),
       ),
       'display' => array(),
@@ -84,6 +136,13 @@ function commerce_kickstart_merchandising_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'language_content_type_ad_push';
+  $strongarm->value = '0';
+  $export['language_content_type_ad_push'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'menu_options_ad_push';
   $strongarm->value = array();
   $export['menu_options_ad_push'] = $strongarm;
@@ -107,6 +166,13 @@ function commerce_kickstart_merchandising_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'node_preview_ad_push';
+  $strongarm->value = '1';
+  $export['node_preview_ad_push'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'node_submitted_ad_push';
   $strongarm->value = 0;
   $export['node_submitted_ad_push'] = $strongarm;
@@ -122,7 +188,7 @@ function commerce_kickstart_merchandising_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'site_403';
-  $strongarm->value = 'node/9';
+  $strongarm->value = '';
   $export['site_403'] = $strongarm;
 
   $strongarm = new stdClass();

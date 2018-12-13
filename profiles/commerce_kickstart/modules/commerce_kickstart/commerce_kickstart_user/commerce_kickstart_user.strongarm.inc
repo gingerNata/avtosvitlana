@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_user.strongarm.inc
@@ -14,7 +15,7 @@ function commerce_kickstart_user_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'commerce_customer_profile_billing_addressbook';
-  $strongarm->value = TRUE;
+  $strongarm->value = 1;
   $export['commerce_customer_profile_billing_addressbook'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -35,7 +36,7 @@ function commerce_kickstart_user_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'commerce_customer_profile_shipping_field';
-  $strongarm->value = 'commerce_customer_shipping';
+  $strongarm->value = '';
   $export['commerce_customer_profile_shipping_field'] = $strongarm;
 
   $strongarm = new stdClass();

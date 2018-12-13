@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_user.features.user_permission.inc

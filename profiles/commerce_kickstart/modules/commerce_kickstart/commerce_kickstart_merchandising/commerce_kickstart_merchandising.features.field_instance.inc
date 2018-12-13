@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_merchandising.features.field_instance.inc
@@ -43,11 +44,59 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-ad_push-field_first_or_second'.
+  $field_instances['node-ad_push-field_first_or_second'] = array(
+    'bundle' => 'ad_push',
+    'default_value' => array(
+      0 => array(
+        'value' => 1,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 5,
+      ),
+      'product_list' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'fences_wrapper' => 'div_div_div',
+    'field_name' => 'field_first_or_second',
+    'label' => 'Первая/вторая',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 4,
+    ),
+  );
+
   // Exported field_instance: 'node-ad_push-field_image'.
   $field_instances['node-ad_push-field_image'] = array(
     'bundle' => 'ad_push',
     'deleted' => 0,
-    'description' => 'Upload an image to go with this article.',
+    'description' => 'Загрузите изображение для этой статьи.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -83,8 +132,9 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'fences_wrapper' => 'div_div_div',
     'field_name' => 'field_image',
-    'label' => 'Image',
+    'label' => 'Картинка',
     'required' => 1,
     'settings' => array(
       'alt_field' => 1,
@@ -105,7 +155,7 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 3,
+      'weight' => 2,
     ),
   );
 
@@ -114,7 +164,7 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
     'bundle' => 'ad_push',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Link this content to a URL. It can either be relative to your site (for example : <em>all-products</em>) or an absolute path.',
+    'description' => 'Может быть любая ссылка, но лутше на страницу товара на сайте.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -143,13 +193,15 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'fences_wrapper' => 'div_div_div',
     'field_name' => 'field_link',
-    'label' => 'Link',
+    'label' => 'Ссылка',
     'required' => 0,
     'settings' => array(
       'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
+        'configurable_class' => 0,
         'configurable_title' => 0,
         'rel' => '',
         'target' => 'default',
@@ -159,8 +211,9 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
         'url_cutoff' => '',
       ),
       'enable_tokens' => 1,
+      'rel_remove' => 'default',
       'title' => 'none',
-      'title_label_use_field_label' => FALSE,
+      'title_label_use_field_label' => 0,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -172,7 +225,7 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 4,
+      'weight' => 3,
     ),
   );
 
@@ -181,7 +234,7 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
     'bundle' => 'ad_push',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Short description of the content that you promote.',
+    'description' => 'Краткое описание контента, который вы рекламируете.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -210,8 +263,9 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'fences_wrapper' => 'div_div_div',
     'field_name' => 'field_tagline',
-    'label' => 'Tagline',
+    'label' => 'Теги',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -224,7 +278,7 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
         'size' => 80,
       ),
       'type' => 'text_textfield',
-      'weight' => 2,
+      'weight' => 1,
     ),
   );
 
@@ -257,7 +311,7 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
     'entity_type' => 'node',
     'fences_wrapper' => 'h2',
     'field_name' => 'title_field',
-    'label' => 'Title',
+    'label' => 'Заголовок',
     'required' => 1,
     'settings' => array(
       'hide_label' => array(
@@ -274,20 +328,21 @@ function commerce_kickstart_merchandising_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -5,
+      'weight' => 0,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Comment');
-  t('Image');
-  t('Link');
-  t('Link this content to a URL. It can either be relative to your site (for example : <em>all-products</em>) or an absolute path.');
-  t('Short description of the content that you promote.');
-  t('Tagline');
-  t('Title');
-  t('Upload an image to go with this article.');
+  t('Заголовок');
+  t('Загрузите изображение для этой статьи.');
+  t('Картинка');
+  t('Краткое описание контента, который вы рекламируете.');
+  t('Может быть любая ссылка, но лутше на страницу товара на сайте.');
+  t('Первая/вторая');
+  t('Ссылка');
+  t('Теги');
 
   return $field_instances;
 }

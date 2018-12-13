@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_merchandising.features.inc
@@ -26,11 +27,11 @@ function commerce_kickstart_merchandising_views_api($module = NULL, $api = NULL)
 function commerce_kickstart_merchandising_node_info() {
   $items = array(
     'ad_push' => array(
-      'name' => t('Ad Push'),
+      'name' => t('Реклама'),
       'base' => 'node_content',
-      'description' => t('Use <em>ad push</em> to promote content on the homepage.'),
+      'description' => t('Використовуй <em>рекламу</em> щоб додати блоки для просування товару на головну.'),
       'has_title' => '1',
-      'title_label' => t('Title'),
+      'title_label' => t('Заголовок'),
       'help' => t('Title field is for administrative purpose only and will not be displayed on the site.'),
     ),
   );

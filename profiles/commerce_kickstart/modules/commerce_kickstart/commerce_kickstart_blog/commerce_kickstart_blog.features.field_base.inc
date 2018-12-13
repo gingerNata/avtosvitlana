@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_blog.features.field_base.inc

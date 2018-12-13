@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_blog.strongarm.inc
@@ -86,6 +87,9 @@ function commerce_kickstart_blog_strongarm() {
       'token' => array(
         'custom_settings' => FALSE,
       ),
+      'revision' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
@@ -100,6 +104,13 @@ function commerce_kickstart_blog_strongarm() {
     ),
   );
   $export['field_bundle_settings_node__blog_post'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'language_content_type_blog_post';
+  $strongarm->value = '0';
+  $export['language_content_type_blog_post'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -135,7 +146,7 @@ function commerce_kickstart_blog_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'node_submitted_blog_post';
-  $strongarm->value = 1;
+  $strongarm->value = 0;
   $export['node_submitted_blog_post'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -144,6 +155,20 @@ function commerce_kickstart_blog_strongarm() {
   $strongarm->name = 'pathauto_node_blog_post_pattern';
   $strongarm->value = 'blog/[node:title]';
   $export['pathauto_node_blog_post_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_blog_category_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_blog_category_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_tags_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_tags_pattern'] = $strongarm;
 
   return $export;
 }

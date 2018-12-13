@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * feeds_import.feeds_importer_default.inc
@@ -18,47 +19,93 @@ function feeds_import_feeds_importer_default() {
     'name' => 'Node import',
     'description' => 'Import nodes from CSV file.',
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
+      'plugin_key' => 'FeedsSpider',
       'config' => array(
-        'direct' => FALSE,
+        'auto_detect_feeds' => 0,
+        'use_pubsubhubbub' => 0,
+        'designated_hub' => '',
+        'request_timeout' => '',
+        'auto_scheme' => 'http',
+        'accept_invalid_cert' => 0,
       ),
     ),
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
+      'plugin_key' => 'FeedsXPathParserHTML',
       'config' => array(
-        'delimiter' => ',',
+        'sources' => array(),
+        'rawXML' => array(),
+        'context' => '',
+        'exp' => array(
+          'errors' => FALSE,
+          'tidy' => FALSE,
+          'debug' => array(),
+          'tidy_encoding' => 'UTF8',
+        ),
+        'allow_override' => TRUE,
       ),
     ),
     'processor' => array(
       'plugin_key' => 'FeedsNodeProcessor',
       'config' => array(
-        'bundle' => 'article',
-        'update_existing' => 1,
         'expire' => '-1',
+        'author' => 0,
+        'authorize' => 1,
         'mappings' => array(
           0 => array(
-            'source' => 'title',
+            'source' => 'xpathparser:0',
             'target' => 'title',
-            'unique' => FALSE,
+            'unique' => 1,
+            'language' => 'und',
           ),
           1 => array(
-            'source' => 'body',
-            'target' => 'body',
-            'unique' => FALSE,
+            'source' => 'xpathparser:1',
+            'target' => 'title_field',
+            'field_language' => 'ru',
+            'language' => 'ru',
           ),
           2 => array(
-            'source' => 'published',
-            'target' => 'created',
+            'source' => 'xpathparser:2',
+            'target' => 'field_number',
             'unique' => FALSE,
+            'language' => 'und',
           ),
           3 => array(
-            'source' => 'guid',
-            'target' => 'guid',
-            'unique' => 1,
+            'source' => 'xpathparser:3',
+            'target' => 'field_car_brand',
+            'unique' => FALSE,
+            'language' => 'und',
+          ),
+          4 => array(
+            'source' => 'xpathparser:4',
+            'target' => 'field_spare_part',
+            'unique' => FALSE,
+            'language' => 'und',
+          ),
+          5 => array(
+            'source' => 'xpathparser:5',
+            'target' => 'field_product:product_id',
+            'unique' => FALSE,
+            'language' => 'und',
+          ),
+          6 => array(
+            'source' => 'xpathparser:6',
+            'target' => 'field_state',
+            'unique' => FALSE,
+            'language' => 'und',
+          ),
+          7 => array(
+            'source' => 'xpathparser:7',
+            'target' => 'field_description',
+            'format' => 'full_html',
           ),
         ),
+        'insert_new' => '1',
+        'update_existing' => '0',
+        'update_non_existent' => 'skip',
         'input_format' => 'plain_text',
-        'author' => 0,
+        'skip_hash_check' => 0,
+        'bundle' => 'product_display',
+        'language' => 'und',
       ),
     ),
     'content_type' => '',
@@ -66,6 +113,7 @@ function feeds_import_feeds_importer_default() {
     'import_period' => '-1',
     'expire_period' => 3600,
     'import_on_create' => 1,
+    'process_in_background' => 0,
   );
   $export['node'] = $feeds_importer;
 

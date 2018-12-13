@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_lite_product.features.inc
@@ -21,47 +22,47 @@ function commerce_kickstart_lite_product_image_default_styles() {
 
   // Exported image style: product_full.
   $styles['product_full'] = array(
+    'label' => 'product_full',
     'effects' => array(
-      1 => array(
+      3 => array(
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => 400,
-          'height' => 550,
+          'width' => 550,
+          'height' => 400,
         ),
         'weight' => 1,
       ),
     ),
-    'label' => 'product_full',
   );
 
   // Exported image style: product_medium.
   $styles['product_medium'] = array(
+    'label' => 'product_medium',
     'effects' => array(
       1 => array(
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => 230,
-          'height' => 260,
+          'width' => 350,
+          'height' => 250,
         ),
         'weight' => 1,
       ),
     ),
-    'label' => 'product_medium',
   );
 
   // Exported image style: product_thumbnail.
   $styles['product_thumbnail'] = array(
+    'label' => 'product_thumbnail',
     'effects' => array(
-      1 => array(
+      2 => array(
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => 110,
-          'height' => 130,
+          'width' => 80,
+          'height' => 60,
         ),
         'weight' => 1,
       ),
     ),
-    'label' => 'product_thumbnail',
   );
 
   return $styles;

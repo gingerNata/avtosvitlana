@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_blog.features.inc
@@ -43,17 +44,17 @@ function commerce_kickstart_blog_image_default_styles() {
 
   // Exported image style: blog_medium.
   $styles['blog_medium'] = array(
+    'label' => 'blog_medium',
     'effects' => array(
-      2 => array(
+      5 => array(
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => 430,
-          'height' => 300,
+          'width' => 300,
+          'height' => 250,
         ),
         'weight' => 1,
       ),
     ),
-    'label' => 'blog_medium',
   );
 
   return $styles;
@@ -65,11 +66,11 @@ function commerce_kickstart_blog_image_default_styles() {
 function commerce_kickstart_blog_node_info() {
   $items = array(
     'blog_post' => array(
-      'name' => t('Blog Post'),
+      'name' => t('Сообщение блога'),
       'base' => 'node_content',
-      'description' => t('Use <em>blog post</em> to write regular content.'),
+      'description' => t('Используйте <em> сообщение в блоге </ em>, чтобы писать обычный контент.'),
       'has_title' => '1',
-      'title_label' => t('Title'),
+      'title_label' => t('Заголовок'),
       'help' => '',
     ),
   );

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * commerce_kickstart_blog.features.field_instance.inc
@@ -22,7 +23,7 @@ function commerce_kickstart_blog_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 1,
+        'weight' => 3,
       ),
       'product_in_cart' => array(
         'label' => 'above',
@@ -40,16 +41,16 @@ function commerce_kickstart_blog_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'text',
         'settings' => array(
-          'trim_length' => 600,
+          'trim_length' => 450,
         ),
         'type' => 'text_summary_or_trimmed',
-        'weight' => 1,
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'node',
-    'fences_wrapper' => '',
+    'fences_wrapper' => 'div_div_div',
     'field_name' => 'body',
-    'label' => 'Description',
+    'label' => 'Содержымое',
     'required' => 0,
     'settings' => array(
       'display_summary' => 1,
@@ -80,7 +81,7 @@ function commerce_kickstart_blog_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 2,
+        'weight' => 1,
       ),
       'product_list' => array(
         'label' => 'above',
@@ -93,12 +94,13 @@ function commerce_kickstart_blog_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 2,
+        'weight' => 3,
       ),
     ),
     'entity_type' => 'node',
+    'fences_wrapper' => 'div_div_div',
     'field_name' => 'field_blog_category',
-    'label' => 'Category',
+    'label' => 'Категория',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -119,14 +121,14 @@ function commerce_kickstart_blog_field_default_field_instances() {
   $field_instances['node-blog_post-field_image'] = array(
     'bundle' => 'blog_post',
     'deleted' => 0,
-    'description' => 'Upload an image to go with this article.',
+    'description' => 'Загрузите изображение к этой статье.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => 'blog_full',
+          'image_style' => 'blog_medium',
         ),
         'type' => 'image',
         'weight' => 0,
@@ -155,8 +157,9 @@ function commerce_kickstart_blog_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'fences_wrapper' => 'div_div_div',
     'field_name' => 'field_image',
-    'label' => 'Image',
+    'label' => 'Изображение',
     'required' => 1,
     'settings' => array(
       'alt_field' => 1,
@@ -166,7 +169,7 @@ function commerce_kickstart_blog_field_default_field_instances() {
       'max_filesize' => '',
       'max_resolution' => '',
       'min_resolution' => '',
-      'title_field' => 0,
+      'title_field' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -186,14 +189,14 @@ function commerce_kickstart_blog_field_default_field_instances() {
     'bundle' => 'blog_post',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Enter a comma-separated list of words to describe your content.',
+    'description' => 'Введите список слов, разделенных запятыми, чтобы описать ваш контент.',
     'display' => array(
       'default' => array(
         'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 3,
+        'weight' => 2,
       ),
       'product_in_cart' => array(
         'label' => 'above',
@@ -212,17 +215,19 @@ function commerce_kickstart_blog_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 3,
+        'weight' => 4,
       ),
     ),
     'entity_type' => 'node',
+    'fences_wrapper' => 'div_div_div',
     'field_name' => 'field_tags',
-    'label' => 'Tags',
-    'required' => FALSE,
+    'label' => 'Теги',
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 0,
       'module' => 'taxonomy',
       'settings' => array(
         'autocomplete_path' => 'taxonomy/autocomplete',
@@ -253,17 +258,22 @@ function commerce_kickstart_blog_field_default_field_instances() {
         'weight' => 0,
       ),
       'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
+        'label' => 'hidden',
+        'module' => 'title',
+        'settings' => array(
+          'title_class' => '',
+          'title_link' => 'content',
+          'title_style' => 'h3',
+        ),
+        'type' => 'title_linked',
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'node',
     'fences_wrapper' => 'h2',
     'field_name' => 'title_field',
-    'label' => 'Title',
-    'required' => TRUE,
+    'label' => 'Заголовок',
+    'required' => 1,
     'settings' => array(
       'hide_label' => array(
         'entity' => 'entity',
@@ -273,6 +283,7 @@ function commerce_kickstart_blog_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'text',
       'settings' => array(
         'size' => 60,
@@ -284,13 +295,13 @@ function commerce_kickstart_blog_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Category');
-  t('Description');
-  t('Enter a comma-separated list of words to describe your content.');
-  t('Image');
-  t('Tags');
-  t('Title');
-  t('Upload an image to go with this article.');
+  t('Введите список слов, разделенных запятыми, чтобы описать ваш контент.');
+  t('Заголовок');
+  t('Загрузите изображение к этой статье.');
+  t('Изображение');
+  t('Категория');
+  t('Содержымое');
+  t('Теги');
 
   return $field_instances;
 }
