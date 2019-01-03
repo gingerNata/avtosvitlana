@@ -1,0 +1,305 @@
+/* Custom CSS overrides */
+
+/******************************************************************/
+/*                            Header                              */
+/******************************************************************/
+
+#header-top-inside {
+  padding: 40px 0 10px;
+}
+
+.top-el, #site-slogan {
+  padding-top: 15px;
+}
+
+.hamburger {
+  display: block;
+  height: 14px;
+  width: 14px;
+  background: url("../images/menu.png") no-repeat;
+  -webkit-background-size: 14px;
+  background-size: 14px;
+}
+
+#bottom-content, .toggle-control a, .toggle-control a:hover {
+  background-color: #833133;
+}
+
+#pre-header {
+  background-color: #833133;
+}
+
+/*********************** Logo zone ********************************/
+
+#header-top #header-top-inside .logo-wrapper #logo a img {
+  width: 160px;
+  height: auto;
+  max-width: none;
+  margin: 0;
+}
+
+#logo {
+  display: inline-block;
+  max-width: 160px;
+}
+
+#site-slogan {
+  display: inline-block;
+  margin-left: 30px;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: top;
+  max-width: 345px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #ab4043;
+}
+
+.region-header-top-left .phones p a {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #444;
+  text-decoration: none;
+  transition: all .5s;
+}
+
+.region-header-top-left .phones p {
+  margin-bottom: 2px;
+  position: relative;
+}
+
+.region-header-top-left .viber:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  background-image: url('../images/viber.png');
+  background-size: 45px 19px;
+  background-repeat: no-repeat;
+  top: 3px;
+  margin-left: 5px;
+  width: 70px;
+  height: 19px;
+}
+
+.region-header-top-left .lifecell:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  background-image: url('../images/Lifecel.png');
+  background-size: 45px 19px;
+  background-repeat: no-repeat;
+  top: 3px;
+  margin-left: 5px;
+  width: 70px;
+  height: 19px;
+}
+
+.region-header-top-left .kyivstar:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  background-image: url('../images/kyivstar_logo_red.png');
+  background-size: 45px 19px;
+  background-repeat: no-repeat;
+  top: 3px;
+  margin-left: 5px;
+  width: 70px;
+  height: 19px;
+}
+
+@media (max-width: 768px) {
+  .logo-wrapper {
+    text-align: center;
+  }
+
+  #site-slogan {
+    margin-left: 0;
+  }
+
+  #header-top {
+    border-bottom: 1px dashed #a9a9a9;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+
+  #site-slogan {
+    max-width: 250px;
+  }
+}
+
+
+/********************** Phones block ******************************/
+
+#block-block-2 {
+  margin-left: 45px;
+}
+
+.phones {
+  color: #444;
+  font-weight: bold;
+  width: 150px;
+  vertical-align: top;
+  display: inline-block;
+}
+
+/********************* User menu block *****************************/
+.region-header-top-right {
+}
+
+#block-menu-menu-user-menu .content ul.menu a:before {
+  position: absolute;
+  content: '';
+  left: 0;
+  display: inline-block;
+  background-image: url('../images/user.png');
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+}
+
+
+/************   Shopping cart       ***************************/
+#block-menu-menu-user-menu .content ul.menu a, .view-shopping-cart .links li a {
+  position: relative;
+  line-height: 40px;
+  padding: 0;
+  padding-left: 50px;
+  text-transform: capitalize;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #444444;
+}
+
+#block-menu-menu-user-menu .content ul.menu a:hover, .view-shopping-cart .links li a:hover {
+  text-decoration: none;
+  color: #ab4043;
+}
+
+
+.view-shopping-cart .line-item-summary {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.line-item-summary .item-quantity {
+  float: none;
+  margin-top: -10px;
+  margin-left: 50px;
+}
+
+.view-shopping-cart .links li a:before {
+  position: absolute;
+  left: 0;
+  content: "";
+  display: inline-block;
+  vertical-align: bottom;
+  background: url("../images/cart.png") no-repeat;
+  background-size: 40px 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.view-shopping-cart .line-item-summary-view-cart {
+  padding: 0;
+}
+
+/***************************** MOBILE TOP *************************/
+
+@media (max-width: 768px) {
+
+  #header-top-inside {
+    padding-top: 0;
+  }
+
+  .right-blocks-wrapper {
+    background: #ab4043;
+    color: white;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #header {
+    display: none;
+  }
+
+  .region-header-top-right > div {
+    display: inline-block;
+    width: 70px;
+    vertical-align: top;
+  }
+
+  .view-shopping-cart .links .line-item-summary-view-cart a, #block-menu-menu-user-menu .content ul.menu a {
+    font-size: 0;
+  }
+
+  #block-menu-menu-user-menu a {
+    font-size: 0;
+  }
+
+  #block-menu-menu-user-menu .content ul.menu a:before {
+    background-image: url('../images/user-white.png');
+  }
+
+  #block-menu-menu-user-menu .content ul.menu a[href*='user/logout']:before {
+    background-image: url('../images/logout.png');
+  }
+
+  .view-shopping-cart .links li a:before {
+    background: url("../images/cart2.png") no-repeat;
+    background-size: contain;
+  }
+
+  .view-shopping-cart .item-quantity {
+    display: none;
+  }
+
+  .go-to-search a {
+    font-size: 0;
+    position: relative;
+  }
+
+  .go-to-search a:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    display: inline-block;
+    background-image: url('../images/search-white.png');
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .logo-wrapper {
+    margin-top: 60px;
+  }
+}
+
+/*******************************************************************/
+/*                         Main menu                               */
+/*******************************************************************/
+#main-navigation-inside .menu {
+  text-align: center;
+}
+
+#main-navigation #main-navigation-inside nav ul li a {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #5a5a5a;
+}
+
+#main-navigation #main-navigation-inside nav ul .active, #main-navigation #main-navigation-inside nav ul li a:hover {
+  color: #ab4043;
+}

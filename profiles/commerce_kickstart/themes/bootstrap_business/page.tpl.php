@@ -38,7 +38,7 @@
         <!-- EOF: #pre-header-inside -->
 
     </div>
-    <div class="toggle-control"><a href="javascript:showPreHeader()"><span class="glyphicon glyphicon-plus"></span></a></div>
+    <div class="toggle-control"><a href="javascript:showPreHeader()"><span class="hamburger"></span></a></div>
 </div>
 <!-- EOF: #pre-header -->    
 <?php endif; ?>
@@ -53,7 +53,7 @@
         <div id="header-top-inside" class="clearfix">
             <div class="row">
 
-                <div class="logo-wrapper col-md-6">
+                <div class="logo-wrapper col-xs-12 col-sm-12 col-md-6">
                     <?php if ($logo):?>
                         <div id="logo">
                             <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"> <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" /> </a>
@@ -102,29 +102,6 @@
 <!-- EOF: #header-top -->    
 <?php endif; ?>
 
-<!-- header -->
-<header id="header" role="banner" class="clearfix">
-    <div class="container">
-
-        <!-- #header-inside -->
-        <div id="header-inside" class="clearfix">
-            <div class="row">
-                <div class="col-md-12">
-
-                <?php if ($page['header']) :?>
-                <?php print render($page['header']); ?>
-                <?php endif; ?>
-
-
-                </div>
-            </div>
-        </div>
-        <!-- EOF: #header-inside -->
-
-    </div>
-</header>
-<!-- EOF: #header --> 
-
 <!-- #main-navigation --> 
 <div id="main-navigation" class="clearfix">
     <div class="container">
@@ -132,8 +109,9 @@
         <!-- #main-navigation-inside -->
         <div id="main-navigation-inside" class="clearfix">
             <div class="row">
-                <div class="col-md-12">
-                    <nav role="navigation">
+                <div class="col-md-12 hidden-xs hidden-sm">
+                    <nav role="navigation" id="responsive">
+                        <div id="mwrapper">
                         <?php if ($page['navigation']) :?>
                         <?php print drupal_render($page['navigation']); ?>
                         <?php else : ?>
@@ -141,6 +119,7 @@
                         <?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('class' => array('main-menu', 'menu'), ), 'heading' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible'), ), )); ?>
 
                         <?php endif; ?>
+                        </div>
                     </nav>
                 </div>
             </div>
@@ -150,6 +129,30 @@
     </div>
 </div>
 <!-- EOF: #main-navigation -->
+
+
+<!-- header -->
+<header id="header" role="banner" class="clearfix">
+    <div class="container">
+
+        <!-- #header-inside -->
+        <div id="header-inside" class="clearfix">
+            <div class="row">
+                <div class="col-md-12">
+
+                  <?php if ($page['header']) :?>
+                    <?php print render($page['header']); ?>
+                  <?php endif; ?>
+
+
+                </div>
+            </div>
+        </div>
+        <!-- EOF: #header-inside -->
+
+    </div>
+</header>
+<!-- EOF: #header -->
 
 <?php if ($page['banner']) : ?>
 <!-- #banner -->

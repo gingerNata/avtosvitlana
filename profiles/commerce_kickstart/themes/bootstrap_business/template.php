@@ -109,8 +109,8 @@ function bootstrap_business_preprocess_page(&$vars) {
 	}
 
 	if($vars['page']['header_top_left'] && $vars['page']['header_top_right']) { 
-		$vars['header_top_left_grid_class'] = 'col-md-4';
-		$vars['header_top_right_grid_class'] = 'col-md-2';
+		$vars['header_top_left_grid_class'] = 'col-md-3 top-el hidden-xs hidden-sm';
+		$vars['header_top_right_grid_class'] = 'col-md-3 col-xs-12 top-el right-blocks-wrapper';
 	} elseif ($vars['page']['header_top_right'] || $vars['page']['header_top_left']) {
 		$vars['header_top_left_grid_class'] = 'col-md-12';
 		$vars['header_top_right_grid_class'] = 'col-md-12';		
@@ -128,12 +128,12 @@ function bootstrap_business_preprocess_page(&$vars) {
 	if($vars['page']['pre_header_first'] || $vars['page']['pre_header_second'] || $vars['page']['pre_header_third']) { 
 	drupal_add_js('
 	function hidePreHeader(){
-	jQuery(".toggle-control").html("<a href=\"javascript:showPreHeader()\"><span class=\"glyphicon glyphicon-plus\"></span></a>");
+	jQuery(".toggle-control").html("<a href=\"javascript:showPreHeader()\"><span class=\"hamburger\"></span></a>");
 	jQuery("#pre-header-inside").slideUp("fast");
 	}
 
 	function showPreHeader() {
-	jQuery(".toggle-control").html("<a href=\"javascript:hidePreHeader()\"><span class=\"glyphicon glyphicon-minus\"></span></a>");
+	jQuery(".toggle-control").html("<a href=\"javascript:hidePreHeader()\"><span class=\"hamburger\"></span></a>");
 	jQuery("#pre-header-inside").slideDown("fast");
 	}
 	',

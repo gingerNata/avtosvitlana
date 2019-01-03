@@ -57,38 +57,38 @@
 }
 @media screen and (max-width: 400px) {
     /********************* User menu block *****************************/
-    #block-menu-menu-user-menu {
-        width: 350px;
-    }
+    /*#block-menu-menu-user-menu {*/
+        /*width: 350px;*/
+    /*}*/
 
-    #block-menu-menu-user-menu a {
-        padding: 8px 16px !important;
-        width: 145px;
-        vertical-align: top;
-    }
-    #main-navigation ul.menu li a{
-        padding: 5px;
-    }
+    /*#block-menu-menu-user-menu a {*/
+        /*padding: 8px 16px !important;*/
+        /*width: 145px;*/
+        /*vertical-align: top;*/
+    /*}*/
+    /*#main-navigation ul.menu li a{*/
+        /*padding: 5px;*/
+    /*}*/
     /************************** Cars block *****************************/
-    .cars-block .views-row {
-        width: 120px;
-    }
-    .main-catalog li.views-row {
-        width: auto;
-    }
+    /*.cars-block .views-row {*/
+        /*width: 120px;*/
+    /*}*/
+    /*.main-catalog li.views-row {*/
+        /*width: auto;*/
+    /*}*/
     /**************************** Facets *******************************/
-    #block-facetapi-1q42zld10krsrgzuhrrxq1hp4liekkeb, #block-facetapi-z1kbl0brnycptgovlpl0u5g4gthghfax,
-    #block-facetapi-z81pdc9qru13qdlnzbhxtxfht1pmmd0y{
-        display: none;
-    }
+    /*#block-facetapi-1q42zld10krsrgzuhrrxq1hp4liekkeb, #block-facetapi-z1kbl0brnycptgovlpl0u5g4gthghfax,*/
+    /*#block-facetapi-z81pdc9qru13qdlnzbhxtxfht1pmmd0y{*/
+        /*display: none;*/
+    /*}*/
     /**************************** Product *****************************/
-    .w3-bar .w3-button {
-        margin-left: 0;
-    }
-    .w3-bar-item{
-        padding: 5px;
-        font-size: 1em;
-    }
+    /*.w3-bar .w3-button {*/
+        /*margin-left: 0;*/
+    /*}*/
+    /*.w3-bar-item{*/
+        /*padding: 5px;*/
+        /*font-size: 1em;*/
+    /*}*/
     /**************************** Footer *****************************/
     #subfooter {
         padding: 13px 0 0px;

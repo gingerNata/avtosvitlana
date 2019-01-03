@@ -1,179 +1,4 @@
-/* Custom CSS overrides */
 
-/******************************************************************/
-/*                            Header                              */
-/******************************************************************/
-
-/*#header-top {*/
-/*background: #f5f5f5;*/
-/*}*/
-
-/*********************** Logo zone ********************************/
-
-.logo-wrapper img {
-    max-width: 120px;
-    height: auto;
-    margin: 10px;
-}
-
-#logo {
-    display: inline-block;
-    max-width: 150px;
-}
-
-#site-slogan {
-    top: 20px;
-    position: relative;
-    display: inline-block;
-    max-width: 350px;
-}
-
-/********************** Phones block ******************************/
-
-.phones {
-    /*margin-top: 15px;*/
-    color: #444;
-    font-weight: bold;
-    width: 150px;
-    vertical-align: top;
-    display: inline-block;
-}
-
-/********************* User menu block *****************************/
-.region-header-top-right {
-    padding-top: 15px;
-}
-
-#block-menu-menu-user-menu {
-    /*width: 300px;*/
-    position: relative;
-    margin: auto;
-    text-align: center;
-}
-
-#block-menu-menu-user-menu a {
-    padding: 10px 20px !important;
-    width: 165px;
-    text-transform: uppercase !important;
-    text-align: center;
-    margin: 5px;
-    border-radius: 5px;
-}
-
-#block-menu-menu-user-menu .first a:hover {
-    background: none;
-    border: 1px solid #c1272d;
-    color: #c1272d !important;
-}
-
-#block-menu-menu-user-menu .first a {
-    background: #c1272d;
-    border: 1px solid #c1272d;
-    color: white !important;
-}
-
-#block-menu-menu-user-menu .last a {
-    border: 1px solid #ab4043;
-    color: #ab4043;
-}
-
-#block-menu-menu-user-menu .last a:hover {
-    background: #ab4043;
-    border: 1px solid #ab4043;
-    color: white !important;
-}
-
-/************   Shopping cart       ***************************/
-.region-header-top-left {
-    padding-top: 30px;
-}
-
-.line-item-summary {
-    margin-bottom: 0;
-}
-
-.view-shopping-cart {
-    text-align: center;
-}
-
-.line-item-summary .line-item-quantity {
-    float: none;
-}
-
-.view-shopping-cart li a:after {
-    visibility: visible;
-    content: "";
-    display: inline-block;
-    background: url("../images/cart2.png") no-repeat;
-    background-size: contain;
-    width: 70px;
-    height: 70px;
-    margin-left: 20px;
-    margin-top: -10px;
-}
-
-#block-views-shopping-cart-block {
-    display: inline-block;
-    position: relative;
-    /*margin-top: 30px;*/
-}
-
-.view-shopping-cart li a {
-    font-size: 0;
-    height: 0;
-    width: 0;
-}
-
-.view-shopping-cart .line-item-total-label {
-    display: none;
-}
-
-.view-shopping-cart .line-item-total-raw {
-    color: #c1272d;
-    margin-left: 70px;
-}
-
-.view-shopping-cart .line-item-total {
-    margin-bottom: -10px;
-    margin-top: -21px;
-}
-
-.view-shopping-cart .line-item-summary {
-    text-align: left;
-}
-
-.view-shopping-cart .view-empty p {
-    margin: 0;
-    text-align: left;
-}
-
-/*************************** Search form ***********************/
-
-#edit-search-api-views-fulltext-wrapper label {
-    visibility: hidden;
-}
-
-.views-submit-button input {
-    background-color: #ab4043;
-}
-
-#header {
-    background: #f5f5f5;
-    padding: 0;
-}
-
-#header label {
-    color: #676767;
-}
-
-#header .block-search {
-    padding: 0 0 10px 0;
-    text-align: center;
-    margin: auto;
-    width: 88%;
-    height: 100%;
-    position: relative;
-}
 
 /****************************************************************/
 /*                       Content                                */
@@ -969,108 +794,108 @@ fieldset.group-left, fieldset.group-right {
     /*display: block;*/
 }
 
-.page-user,
-.page-checkout {
     /* Registration form */
     /* Login form, create an account block */
     /* User home */
-}
+@media screen and (min-width: 768px) {
 
-.page-user #user_register_form,
-.page-user #user_login_form,
-.page-user .create-account,
-.page-user #user_pass_form,
-.page-checkout #user_register_form,
-.page-checkout #user_login_form,
-.page-checkout .create-account,
-.page-checkout #user_pass_form {
-    clear: none;
-    float: left;
-    width: 45%;
-}
 
-.page-user form#user-register-form .form-item-pass,
-.page-user form#user-profile-form .form-item-pass,
-.page-checkout form#user-register-form .form-item-pass,
-.page-checkout form#user-profile-form .form-item-pass {
-    margin-bottom: auto;
-}
+    .page-user #user_register_form,
+    .page-user #user_login_form,
+    .page-user .create-account,
+    .page-user #user_pass_form,
+    .page-checkout #user_register_form,
+    .page-checkout #user_login_form,
+    .page-checkout .create-account,
+    .page-checkout #user_pass_form {
+        clear: none;
+        float: left;
+        width: 45%;
+    }
 
-.page-user form#user-register-form .form-item-pass .password-parent,
-.page-user form#user-profile-form .form-item-pass .password-parent,
-.page-checkout form#user-register-form .form-item-pass .password-parent,
-.page-checkout form#user-profile-form .form-item-pass .password-parent {
-    position: relative;
-    width: 36.3em;
-}
+    .page-user form#user-register-form .form-item-pass,
+    .page-user form#user-profile-form .form-item-pass,
+    .page-checkout form#user-register-form .form-item-pass,
+    .page-checkout form#user-profile-form .form-item-pass {
+        margin-bottom: auto;
+    }
 
-.page-user form#user-register-form .form-item-pass .password-parent .password-strength,
-.page-user form#user-profile-form .form-item-pass .password-parent .password-strength,
-.page-checkout form#user-register-form .form-item-pass .password-parent .password-strength,
-.page-checkout form#user-profile-form .form-item-pass .password-parent .password-strength {
-    position: absolute;
-    right: 15px;
-    bottom: -12px;
-    width: 17em;
-}
+    .page-user form#user-register-form .form-item-pass .password-parent,
+    .page-user form#user-profile-form .form-item-pass .password-parent,
+    .page-checkout form#user-register-form .form-item-pass .password-parent,
+    .page-checkout form#user-profile-form .form-item-pass .password-parent {
+        position: relative;
+        width: 36.3em;
+    }
 
-.page-user form#user-register-form .form-item-pass .confirm-parent,
-.page-user form#user-profile-form .form-item-pass .confirm-parent,
-.page-checkout form#user-register-form .form-item-pass .confirm-parent,
-.page-checkout form#user-profile-form .form-item-pass .confirm-parent {
-    position: relative;
-    width: 36.3em;
-}
+    .page-user form#user-register-form .form-item-pass .password-parent .password-strength,
+    .page-user form#user-profile-form .form-item-pass .password-parent .password-strength,
+    .page-checkout form#user-register-form .form-item-pass .password-parent .password-strength,
+    .page-checkout form#user-profile-form .form-item-pass .password-parent .password-strength {
+        position: absolute;
+        right: 15px;
+        bottom: -12px;
+        width: 17em;
+    }
 
-.page-user form#user-register-form .form-item-pass .confirm-parent div.password-confirm,
-.page-user form#user-profile-form .form-item-pass .confirm-parent div.password-confirm,
-.page-checkout form#user-register-form .form-item-pass .confirm-parent div.password-confirm,
-.page-checkout form#user-profile-form .form-item-pass .confirm-parent div.password-confirm {
-    right: 15px;
-    bottom: 8px;
-    width: 17em;
-}
+    .page-user form#user-register-form .form-item-pass .confirm-parent,
+    .page-user form#user-profile-form .form-item-pass .confirm-parent,
+    .page-checkout form#user-register-form .form-item-pass .confirm-parent,
+    .page-checkout form#user-profile-form .form-item-pass .confirm-parent {
+        position: relative;
+        width: 36.3em;
+    }
 
-.page-user form#user-register-form .form-item-pass .password-suggestions,
-.page-user form#user-profile-form .form-item-pass .password-suggestions,
-.page-checkout form#user-register-form .form-item-pass .password-suggestions,
-.page-checkout form#user-profile-form .form-item-pass .password-suggestions {
-    width: 38.5em;
-}
+    .page-user form#user-register-form .form-item-pass .confirm-parent div.password-confirm,
+    .page-user form#user-profile-form .form-item-pass .confirm-parent div.password-confirm,
+    .page-checkout form#user-register-form .form-item-pass .confirm-parent div.password-confirm,
+    .page-checkout form#user-profile-form .form-item-pass .confirm-parent div.password-confirm {
+        right: 15px;
+        bottom: 8px;
+        width: 17em;
+    }
 
-.page-user form#user-register-form .form-actions,
-.page-user form#user-profile-form .form-actions,
-.page-checkout form#user-register-form .form-actions,
-.page-checkout form#user-profile-form .form-actions {
-    clear: both;
-    margin-top: 0;
-    margin-bottom: 100px;
-    width: 70%;
-}
+    .page-user form#user-register-form .form-item-pass .password-suggestions,
+    .page-user form#user-profile-form .form-item-pass .password-suggestions,
+    .page-checkout form#user-register-form .form-item-pass .password-suggestions,
+    .page-checkout form#user-profile-form .form-item-pass .password-suggestions {
+        width: 38.5em;
+    }
 
-.page-user #user_pass_form,
-.page-checkout #user_pass_form {
-    width: auto;
-}
+    .page-user form#user-register-form .form-actions,
+    .page-user form#user-profile-form .form-actions,
+    .page-checkout form#user-register-form .form-actions,
+    .page-checkout form#user-profile-form .form-actions {
+        clear: both;
+        margin-top: 0;
+        margin-bottom: 100px;
+        width: 70%;
+    }
 
-.page-user form#user-login #user_login_form,
-.page-checkout form#user-login #user_login_form {
-    border: 0;
-    border-right: 1px solid #444;
-    padding-right: 20px;
-    padding-bottom: 0;
-}
+    .page-user #user_pass_form,
+    .page-checkout #user_pass_form {
+        width: auto;
+    }
 
-.page-user form#user-login .create-account,
-.page-checkout form#user-login .create-account {
-    margin: 0;
-    padding: 0 20px 20px 20px;
-}
+    .page-user form#user-login #user_login_form,
+    .page-checkout form#user-login #user_login_form {
+        border: 0;
+        border-right: 1px solid #444;
+        padding-right: 20px;
+        padding-bottom: 0;
+    }
 
-.page-user .profile ul.user-information li,
-.page-checkout .profile ul.user-information li {
-    border-bottom: 0;
-    width: 33%;
+    .page-user form#user-login .create-account,
+    .page-checkout form#user-login .create-account {
+        margin: 0;
+        padding: 0 20px 20px 20px;
+    }
+
+    .page-user .profile ul.user-information li,
+    .page-checkout .profile ul.user-information li {
+        border-bottom: 0;
+        width: 33%;
+    }
 }
 
 /* Address book */
@@ -1082,9 +907,3 @@ a.login-register {
     text-align: center;
 }
 
-/*******************************************************************/
-/*                         Main menu                               */
-/*******************************************************************/
-#main-navigation-inside .menu {
-    text-align: center;
-}
